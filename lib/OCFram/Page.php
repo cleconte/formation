@@ -16,6 +16,7 @@ class Page extends ApplicationComponent
     $this->vars[$var] = $value;
   }
  
+  
   public function getGeneratedPage()
   {
     if (!file_exists($this->contentFile))
