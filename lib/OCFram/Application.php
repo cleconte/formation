@@ -77,7 +77,7 @@ abstract class Application
     return $this->httpResponse;
   }
  
-  public function name()
+  public function name() // ?
   {
     return $this->name;
   }

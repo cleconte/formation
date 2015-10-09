@@ -1,6 +1,7 @@
 <?php
 namespace App\Frontend\Modules\News;
  
+use Model\NewsManagerPDO;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\Comment;
@@ -13,11 +14,12 @@ class NewsController extends BackController
   {
     $nombreNews = $this->app->config()->get('nombre_news');
     $nombreCaracteres = $this->app->config()->get('nombre_caracteres');
- 
+
     // On ajoute une définition pour le titre.
     $this->page->addVar('title', 'Liste des '.$nombreNews.' dernières news');
  
     // On récupère le manager des news.
+    /** @var NewsManagerPDO $manager */
     $manager = $this->managers->getManagerOf('News');
  
     $listeNews = $manager->getList(0, $nombreNews);
@@ -41,11 +43,10 @@ class NewsController extends BackController
   {
     $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
  
-    if (empty($news))
-    {
+    if (empty($news) ||$news ==null){
       $this->app->httpResponse()->redirect404();
     }
- 
+
     $this->page->addVar('title', $news->titre());
     $this->page->addVar('news', $news);
     $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($news->id()));
@@ -53,6 +54,13 @@ class NewsController extends BackController
  
   public function executeInsertComment(HTTPRequest $request)
   {
+    // si la news dans laquelle on veut insérer n'existe pas, redirection
+    $news = $this->managers->getManagerOf('News')->getUnique($request->getData('news'));
+    if($news == null){
+      $this->app->httpResponse()->redirect404();
+    }
+
+
     // Si le formulaire a été envoyé.
     if ($request->method() == 'POST')
     {
@@ -66,7 +74,7 @@ class NewsController extends BackController
     {
       $comment = new Comment;
     }
- 
+
     $formBuilder = new CommentFormBuilder($comment);
     $formBuilder->build();
  

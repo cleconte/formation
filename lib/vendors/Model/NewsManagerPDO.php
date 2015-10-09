@@ -15,7 +15,7 @@ class NewsManagerPDO extends NewsManager
  
     $requete->execute();
   }
- 
+
   public function count()
   {
     return $this->dao->query('SELECT COUNT(*) FROM news')->fetchColumn();
@@ -25,7 +25,12 @@ class NewsManagerPDO extends NewsManager
   {
     $this->dao->exec('DELETE FROM news WHERE id = '.(int) $id);
   }
- 
+
+  /**
+   * @param int $debut
+   * @param int $limite
+   * @return News[]
+   */
   public function getList($debut = -1, $limite = -1)
   {
     $sql = 'SELECT id, auteur, titre, contenu, dateAjout, dateModif FROM news ORDER BY id DESC';
@@ -80,5 +85,9 @@ class NewsManagerPDO extends NewsManager
     $requete->bindValue(':id', $news->id(), \PDO::PARAM_INT);
  
     $requete->execute();
+  }
+
+  public function verifyId($id){
+
   }
 }

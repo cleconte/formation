@@ -27,7 +27,7 @@ class Page extends ApplicationComponent
  
     extract($this->vars);
  
-    ob_start();
+    ob_start(); // ?
       require $this->contentFile;
     $content = ob_get_clean();
  

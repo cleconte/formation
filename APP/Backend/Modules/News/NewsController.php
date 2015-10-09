@@ -13,22 +13,31 @@ class NewsController extends BackController
 {
   public function executeDelete(HTTPRequest $request)
   {
-    $newsId = $request->getData('id');
- 
-    $this->managers->getManagerOf('News')->delete($newsId);
-    $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
- 
-    $this->app->user()->setFlash('La news a bien été supprimée !');
- 
+
+      $newsId = $this->managers->getManagerOf('News')->getunique($request->getData('id'));
+      if($newsId ==null){
+          $this->app->httpResponse()->redirect404();
+      }
+      $this->managers->getManagerOf('News')->delete($newsId);
+
+
+      $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
+
+      $this->app->user()->setFlash('La news a bien été supprimée !');
+
+
     $this->app->httpResponse()->redirect('.');
   }
  
   public function executeDeleteComment(HTTPRequest $request)
   {
-    $this->managers->getManagerOf('Comments')->delete($request->getData('id'));
- 
-    $this->app->user()->setFlash('Le commentaire a bien été supprimé !');
- 
+      $commentsId = $this->managers->getManagerOf('Comments')->get($request->getData('id'));
+      if($commentsId == null){
+          $this->app->httpResponse()->redirect404();
+      }
+      $this->managers->getManagerOf('Comments')->delete($commentsId );
+
+      $this->app->user()->setFlash('Le commentaire a bien été supprimé !');
     $this->app->httpResponse()->redirect('.');
   }
  
@@ -71,6 +80,9 @@ class NewsController extends BackController
     else
     {
       $comment = $this->managers->getManagerOf('Comments')->get($request->getData('id'));
+        if ($comment == null){
+            $this->app->httpResponse()->redirect404();
+        }
     }
  
     $formBuilder = new CommentFormBuilder($comment);
@@ -108,16 +120,21 @@ class NewsController extends BackController
     else
     {
       // L'identifiant de la news est transmis si on veut la modifier
-      if ($request->getExists('id'))
+      if ($request->getExists('id') )
       {
-        $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
+          $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
+          if( $news ==null ){
+
+              $this->app->httpResponse()->redirect404();
+          }
+
       }
       else
       {
         $news = new News;
       }
     }
- 
+
     $formBuilder = new NewsFormBuilder($news);
     $formBuilder->build();
  
@@ -134,4 +151,5 @@ class NewsController extends BackController
  
     $this->page->addVar('form', $form->createView());
   }
+
 }
