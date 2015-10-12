@@ -1,12 +1,10 @@
 <?php
 namespace OCFram;
 
-class VerifyPriorityValidator extends Validator
+
+class VerifyNewUsernameValidator extends Validator
 {
-    protected $manager;
-
-
-    const mmc_priority_admin = 2;
+    protected $managers;
 //vérifier que c'est un pseudo qui existe
 
     public function __construct($errorMessage,$managers)
@@ -18,12 +16,11 @@ class VerifyPriorityValidator extends Validator
 
     public function isValid($value)
     {
-        return self::mmc_priority_admin == $this->manager->isAdmin($value) ;
+        return  $this->managers->verifyunexistUsername($value);
     }
 
     public function setManagers($managers)
     {
-        $this->manager = $managers;
+        $this->managers = $managers;
     }
-
 }

@@ -1,13 +1,17 @@
 <?php
 namespace App\Frontend\Modules\News;
- 
-use Model\NewsManagerPDO;
+use \Model\NewsManagerPDO;
+
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
-use \Entity\Comment;
-use \FormBuilder\CommentFormBuilder;
 use \OCFram\FormHandler;
- 
+
+use \Entity\News;
+use \Entity\Comment;
+
+use \FormBuilder\CommentFormBuilder;
+use \FormBuilder\NewsMemberFormBuilder;
+
 class NewsController extends BackController
 {
   public function executeIndex(HTTPRequest $request)
@@ -92,5 +96,90 @@ class NewsController extends BackController
     $this->page->addVar('comment', $comment);
     $this->page->addVar('form', $form->createView());
     $this->page->addVar('title', 'Ajout d\'un commentaire');
+  }
+
+  public function executeInsert(HTTPRequest $request)
+  {
+
+      // vérifier que la personne est bien connecté
+
+    $this->processForm($request);
+
+    $this->page->addVar('title', 'Ajout d\'une news');
+  }
+
+  public function executeUpdate(HTTPRequest $request)
+  {
+      $this->processForm($request);
+
+      $this->page->addVar('title', 'Modification d\'une news');
+  }
+
+  public function processForm(HTTPRequest $request)
+  {
+    if ($request->method() == 'POST')
+    {
+      $news = new News([ //$this->managers->getManagerOf('Members')->getUsername($_SESSION['id']), //récupérer le nom d'utilisateur si c'est pas un admin sinon laisser en postdata
+          //$this->managers->getManagerOf('Members')->getUsername($this->app->user()->getAttribute("id")
+          'auteur'=>$this->app->user()->getAttribute('user'),
+          'titre' => $request->postData('titre'),
+          'contenu' => $request->postData('contenu')
+      ]);
+
+      if ($request->getExists('id'))
+      {
+        $news->setId($request->getData('id'));
+      }
+    }
+    else
+    {
+      // L'identifiant de la news est transmis si on veut la modifier
+      if ($request->getExists('id') )
+      {
+        $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
+        if( $news ==null ){
+
+          $this->app->httpResponse()->redirect404();
+        }
+
+      }
+      else
+      {
+        $news = new News;
+      }
+    }
+
+    $formBuilder = new NewsMemberFormBuilder($news);
+    $formBuilder->build();
+
+    $form = $formBuilder->form();
+
+    $formHandler = new FormHandler($form, $this->managers->getManagerOf('News'), $request);
+
+    if ($formHandler->process())
+    {
+      $this->app->user()->setFlash($news->isNew() ? 'La news a bien été ajoutée !' : 'La news a bien été modifiée !');
+
+      $this->app->httpResponse()->redirect('.');
+    }
+
+    $this->page->addVar('form', $form->createView());
+  }
+
+  public function executeDelete(HTTPRequest $request)
+  {
+      if($this->managers->getManagerOf('News')->get($request->getData('id'))===false
+          || $this->managers->getManagerOf('News')->get($request->getData('id'))->auteur()!==$this->app->user()->getAttribute('user') )
+      {
+          $this->app->httpResponse()->redirect404();
+      }
+
+      $newsId = $request->getData('id');
+      $this->managers->getManagerOf('News')->delete($newsId);
+      $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
+
+      $this->app->user()->setFlash('La news a bien été supprimée !');
+
+      $this->app->httpResponse()->redirect('.');
   }
 }

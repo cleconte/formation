@@ -24,7 +24,17 @@
           <li><a href="/admin/">Admin</a></li>
           <li><a href="/admin/news-insert.html">Ajouter une news</a></li>
 		  <li><a href="/admin/deconnexion">Deconnexion</a></li>
-          <?php } ?>
+          <?php }
+          else if(!$user->isMember()){?>
+            <li><a href="/Register">inscription</a></li>
+            <li><a href="/Connexion">Connexion</a></li>
+          <?php }
+          else {?>
+
+            <li><a href="/news-insert.html">Ajouter une news</a></li>
+            <li><a href="/Deconnexion">Deconnexion</a></li>
+          <?php }?>
+
         </ul>
       </nav>
  

@@ -10,7 +10,7 @@ use \OCFram\VerifyPriorityValidator;
 use \OCFram\VerifyPasswordValidator;
 use \OCFram\NotNullValidator;
 
-class MemberFormBuilder extends FormBuilder
+class AutorFormBuilder extends FormBuilder
 {
     public function build()
     {
@@ -22,7 +22,6 @@ class MemberFormBuilder extends FormBuilder
                 new MaxLengthValidator('Le pseudo spécifie est trop long(20 caratères maximum)', 20),//pseudo trop long
                 new NotNullValidator('Je dois deviner ton pseudo?'),
                 new VerifyUsernameValidator('Ton pseudo n\'est pas bon',func_get_arg(0)), // le message d'erreur ne s'affiche pas
-                new VerifyPriorityValidator('T\'es pas admin bro',func_get_arg(0)),
             ],
         ]);
 

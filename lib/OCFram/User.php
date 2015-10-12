@@ -42,7 +42,44 @@ class User
  
     $_SESSION['auth'] = $authenticated;
   }
- 
+
+  public function isMember()
+  {
+    return isset($_SESSION['mem']) && $_SESSION['mem'] !== null;
+  }
+
+  public function setMember($member_type)
+  {
+    if(!is_int($member_type)){
+      throw new \InvalidArgumentException('La valeur spécifiée à la méthode User::setMember() doit être un int');
+    }
+    $_SESSION['mem']=$member_type;
+  }
+
+  public function isId()
+  {
+    return isset($_SESSION['id']) && $_SESSION['id'] !== null;
+  }
+
+  public  function  setId($id){
+    if(!is_int($id)){
+      throw new \InvalidArgumentException('La valeur spécifiée à la méthode User::setId() doit être un int');
+    }
+    $_SESSION['id']=$id;
+  }
+  public function isUsername()
+  {
+    return isset($_SESSION['user']) && $_SESSION['user'] !== null;
+  }
+
+  public  function  setUsername($username){
+    if(!is_string($username)){
+      throw new \InvalidArgumentException('La valeur spécifiée à la méthode User::setId() doit être un string');
+    }
+    $_SESSION['user']=$username;
+  }
+
+
   public function setFlash($value)
   {
     $_SESSION['flash'] = $value;

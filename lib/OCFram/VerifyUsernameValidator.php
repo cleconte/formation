@@ -1,6 +1,7 @@
 <?php
 namespace OCFram;
 
+
 class VerifyUsernameValidator extends Validator
 {
     protected $managers;
@@ -15,8 +16,7 @@ class VerifyUsernameValidator extends Validator
 
     public function isValid($value)
     {
-
-        return $value==$this->managers->verifyUsername($value);
+        return  $this->managers->verifyUsername($value);
     }
 
     public function setManagers($managers)

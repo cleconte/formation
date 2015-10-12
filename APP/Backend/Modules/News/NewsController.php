@@ -1,32 +1,31 @@
 <?php
 namespace App\Backend\Modules\News;
- 
+
+
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
+use \OCFram\FormHandler;
+
 use \Entity\News;
 use \Entity\Comment;
+
 use \FormBuilder\CommentFormBuilder;
 use \FormBuilder\NewsFormBuilder;
-use \OCFram\FormHandler;
  
 class NewsController extends BackController
 {
   public function executeDelete(HTTPRequest $request)
   {
-
-      $newsId = $this->managers->getManagerOf('News')->getunique($request->getData('id'));
-      if($newsId ==null){
+      $newsId = $request->getData('id');
+      if($this->managers->getManagerOf('News')->get($request->getData('id'))==false){
           $this->app->httpResponse()->redirect404();
       }
-      $this->managers->getManagerOf('News')->delete($newsId);
+          $this->managers->getManagerOf('News')->delete($newsId);
+          $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
 
+          $this->app->user()->setFlash('La news a bien été supprimée !');
 
-      $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
-
-      $this->app->user()->setFlash('La news a bien été supprimée !');
-
-
-    $this->app->httpResponse()->redirect('.');
+          $this->app->httpResponse()->redirect('.');
   }
  
   public function executeDeleteComment(HTTPRequest $request)
