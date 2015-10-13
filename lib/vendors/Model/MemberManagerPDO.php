@@ -13,11 +13,12 @@ class MemberManagerPDO extends MemberManager
 
     protected function add(Member $member)
     {
-        $requete = $this->dao->prepare('INSERT INTO T_mem_memberc SET mmc_username = :username, mmc_password = :password, mmc_description = :description');
+        $requete = $this->dao->prepare('INSERT INTO T_mem_memberc SET mmc_username = :username, mmc_password = :password, mmc_description = :description, mmc_mail = :mail');
 
         $requete->bindValue(':username', $member->username());
         $requete->bindValue(':password', $member->password());
         $requete->bindValue(':description', $member->description());
+        $requete->bindValue(':mail', $member->mail());
 
         $requete->execute();
     }
@@ -76,7 +77,7 @@ class MemberManagerPDO extends MemberManager
     public function getUsername($id){ //erreur probable
         return $this->dao->query("SELECT mmc_username FROM T_mem_memberc WHERE mmc_id = '$id'")->fetchColumn();
     }
-
+//faire une function get globale possible ?
     public function getId($username){ //erreur probable
         return $this->dao->query("SELECT mmc_id FROM T_mem_memberc WHERE mmc_username = '$username'")->fetchColumn();
     }
@@ -84,6 +85,21 @@ class MemberManagerPDO extends MemberManager
     public function getMail($username){ //erreur probable (insertion sql)
         return $this->dao->query("SELECT mmc_mail FROM T_mem_memberc WHERE mmc_username = '$username'")->fetchColumn();
     }
+
+    public function getPassword($username){ //erreur probable
+        return $this->dao->query("SELECT mmc_password FROM T_mem_memberc WHERE mmc_username ='$username'")->fetchColumn();
+    }
+
+    public function getPriority($username){ //erreur probable
+        return $this->dao->query("SELECT mmc_priority FROM T_mem_memberc WHERE mmc_username ='$username'")->fetchColumn();
+    }
+
+    public function getDescription($username){ //erreur probable
+        return $this->dao->query("SELECT mmc_description FROM T_mem_memberc WHERE mmc_username ='$username'")->fetchColumn();
+    }
+
+
+
     public function verifyPassword($username, $password){
         $i=0;
         $requete = $this->dao->prepare('SELECT mmc_password FROM t_mem_memberc WHERE mmc_username = :login AND mmc_password =:password');
@@ -102,13 +118,4 @@ class MemberManagerPDO extends MemberManager
     }
 
 
-    public function getPassword($username){ //erreur probable
-
-        $requete = $this->dao->query('SELECT mmc_password FROM T_mem_memberc WHERE mmc_username = :login');
-        $requete->bindValue(':login', $username);
-
-        $requete->execute();
-        $result = $requete->fetchAll();
-        return $result;
-    }
 }

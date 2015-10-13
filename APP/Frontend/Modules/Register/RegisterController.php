@@ -20,16 +20,16 @@ class RegisterController extends BackController
                 'password' => $request->postData('password'),
                 'confirmation' => $request->postData('confirmation'),
                 'description' => $request->postData('description'),
-                'mail' => $request->postData('mail'),
+                'mail' => $request->postData('mail')
 
             ]);
         }
         else
         {
-            $member = new Member; // on garde cette entité member ?
+            $member = new Member; // on garde cette entitÃ© member ?
         }
 
-        $formBuilder = new RegisterFormBuilder($member); // même formbuilder ?
+        $formBuilder = new RegisterFormBuilder($member); // mÃªme formbuilder ?
         $formBuilder->build($this->managers->getManagerOf('Member'));
 
         $form = $formBuilder->form();
@@ -38,7 +38,7 @@ class RegisterController extends BackController
 
         if ($formHandler->process())
         {
-            $this->app->user()->setFlash('vous êtes bien inscrit');
+            $this->app->user()->setFlash('vous Ãªtes bien inscrit');
 
             $this->app->httpResponse()->redirect('.');
         }

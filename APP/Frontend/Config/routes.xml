@@ -12,6 +12,16 @@
 
   <route url="/Register" module="Register" action="index" />
 
+
+  <route url="/Profil" module="Profil" action="index" />
+  <route url="/Profil/News" module="Profil" action="News" />
+  <route url="/Profil/Comments" module="Profil" action="Comments" />
+
+  <route url="/Membre-([0-9a-zA-Z]+)" module="Membre" action="index" vars="id"/>
+  <route url="/Membre-([0-9a-zA-Z]+)/News" module="Membre" action="News" vars="id"/>
+  <route url="/Membre-([0-9a-zA-Z]+)/Comments" module="Membre" action="Comments" vars="id" />
+
+
   <route url="/Connexion" module="Connexion" action="index" />
 
   <route url="/Deconnexion" module="Deconnexion" action="index" />

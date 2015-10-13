@@ -408,5 +408,8 @@ footer a {
 .clear { clear: both; }
  
 .middle { vertical-align: middle; }
+
+/* Barre menu profil */
+ul#profilmenu li {display:inline;}
  
  

@@ -11,8 +11,6 @@ namespace App\Frontend\Modules\Device;
 
 use OCFram\BackController;
 use \OCFram\HTTPRequest;
-use \OCFram\Page;
-
 
 class DeviceController extends  BackController
 {

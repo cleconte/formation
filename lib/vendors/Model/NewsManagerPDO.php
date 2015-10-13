@@ -31,6 +31,7 @@ class NewsManagerPDO extends NewsManager
    * @param int $limite
    * @return News[]
    */
+  
   public function getList($debut = -1, $limite = -1)
   {
     $sql = 'SELECT id, auteur, titre, contenu, dateAjout, dateModif FROM news ORDER BY id DESC';
@@ -96,5 +97,31 @@ class NewsManagerPDO extends NewsManager
     $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\News');
 
     return $q->fetch();
+  }
+
+  public function getListMember($auteur)
+  {
+    $req = $this->dao->prepare("SELECT id, auteur, titre, contenu, dateAjout, dateModif FROM news WHERE auteur = :auteur ORDER BY id DESC");
+    $req->execute(array(
+        ':auteur' => $auteur));
+    $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\News');
+
+    $listeNews = $req->fetchAll();
+
+    foreach ($listeNews as $news)
+    {
+      $news->setDateAjout(new \DateTime($news->dateAjout()));
+      $news->setDateModif(new \DateTime($news->dateModif()));
+    }
+
+    $req->closeCursor();
+
+    return $listeNews;
+  }
+
+
+  public function countNewsMember($username)
+  {
+    return $this->dao->query("SELECT COUNT(*) FROM news WHERE auteur = '$username'")->fetchColumn();
   }
 }

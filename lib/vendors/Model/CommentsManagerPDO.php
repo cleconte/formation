@@ -72,4 +72,27 @@ class CommentsManagerPDO extends CommentsManager
 
     return $q->fetch();
   }
+
+  public function getListOfMember( $auteur)
+  {
+
+    $q = $this->dao->prepare('SELECT id, news, auteur, contenu, date FROM comments WHERE auteur = :auteur  ORDER BY id DESC');
+    $q->bindValue(':auteur', $auteur, \PDO::PARAM_INT);
+    $q->execute();
+
+    $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comment');
+
+    $comments = $q->fetchAll();
+
+    foreach ($comments as $comment)
+    {
+      $comment->setDate(new \DateTime($comment->date()));
+    }
+
+    return $comments;
+  }
+   public function countCountMember($username)
+  {
+    return $this->dao->query("SELECT COUNT(*) FROM comments WHERE auteur = '$username'")->fetchColumn();
+  }
 }
