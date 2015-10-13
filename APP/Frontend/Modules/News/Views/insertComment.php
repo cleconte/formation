@@ -1,4 +1,4 @@
-<?php if($user->isMember()) {?>
+
 <h2>Ajouter un commentaire</h2>
 <form action="" method="post">
   <p>
@@ -7,8 +7,3 @@
     <input type="submit" value="Commenter" />
   </p>
 </form>
-<?php }
-  else {
-    $this->app->httpResponse()->redirect404();
-  }
-?>

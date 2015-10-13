@@ -10,7 +10,8 @@ class Member extends Entity
         $password,
         $confirmation,
         $description,
-        $priority;
+        $priorit,
+        $mail;
 
     const ID_INVALIDE = 1;
     const USERNAME_INVALIDE = 2;
@@ -18,6 +19,7 @@ class Member extends Entity
     const CONFIRMATION_INVALIDE = 6;
     const PRIORITY_INVALIDE = 4;
     const DESCRIPTION_INVALIDE = 5;
+    const MAIL_INVALIDE = 8;
 
     public function setID($id)
     {
@@ -76,6 +78,14 @@ class Member extends Entity
         }
         $this->confirmation = $confirmation;
     }
+    public function setMail($mail)
+    {
+        if (!is_string($mail) || empty($mail))
+        {
+            $this->erreurs[] = self::MAIL_INVALIDE;
+        }
+        $this->mail = $mail;
+    }
     public function isValid()
     {
         return !(empty($this->username) || empty($this->password));
@@ -107,5 +117,10 @@ class Member extends Entity
     public function priority()
     {
         return $this->priority;
+    }
+
+    public function mail()
+    {
+        return $this->mail;
     }
 }

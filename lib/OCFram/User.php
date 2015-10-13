@@ -67,6 +67,7 @@ class User
     }
     $_SESSION['id']=$id;
   }
+
   public function isUsername()
   {
     return isset($_SESSION['user']) && $_SESSION['user'] !== null;
@@ -79,11 +80,19 @@ class User
     $_SESSION['user']=$username;
   }
 
+  public function setMail($mail){
+    if(!is_string($mail)){
+      throw new \InvalidArgumentException('La valeur spécifiée à la méthode User::setMail() doit être un string');
+    }
+    $_SESSION['mail']=$mail;
+  }
+
 
   public function setFlash($value)
   {
     $_SESSION['flash'] = $value;
   }
+
     public function setDeconnexion(){
 
 // On détruit les variables de notre session

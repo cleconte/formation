@@ -81,6 +81,9 @@ class MemberManagerPDO extends MemberManager
         return $this->dao->query("SELECT mmc_id FROM T_mem_memberc WHERE mmc_username = '$username'")->fetchColumn();
     }
 
+    public function getMail($username){ //erreur probable (insertion sql)
+        return $this->dao->query("SELECT mmc_mail FROM T_mem_memberc WHERE mmc_username = '$username'")->fetchColumn();
+    }
     public function verifyPassword($username, $password){
         $i=0;
         $requete = $this->dao->prepare('SELECT mmc_password FROM t_mem_memberc WHERE mmc_username = :login AND mmc_password =:password');

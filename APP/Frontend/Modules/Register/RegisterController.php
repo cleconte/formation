@@ -20,7 +20,7 @@ class RegisterController extends BackController
                 'password' => $request->postData('password'),
                 'confirmation' => $request->postData('confirmation'),
                 'description' => $request->postData('description'),
-                // récupérer les deux autres champs aussi
+                'mail' => $request->postData('mail'),
 
             ]);
         }

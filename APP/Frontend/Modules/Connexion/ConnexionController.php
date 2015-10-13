@@ -30,10 +30,7 @@ class ConnexionController extends BackController
         $form = $formBuilder->form();
 
         $formHandler = new FormHandler($form, $this->managers->getManagerOf('Member'), $request);
-
         $entier=(int)$this->managers->getManagerOf('Member')->getId($member->username());
-        var_dump($entier);
-        var_dump((int)$this->managers->getManagerOf('Member')->getId($member->username()));
         if ($formHandler->process())
         {
             //$this->app->user()->setAuthenticated(true);
@@ -41,12 +38,13 @@ class ConnexionController extends BackController
             //$this->app->user()->setFlash(execute($stg));
 
 
-            $this->app->user()->setMember(1); // on met 1 pour auteur, il faudrait le faire dynamiquement.
-
+            $this->app->user()->setMember(1); // on met 1 pour auteur, il faudrait le faire dynamiquement ? (rÃ©cupÃ©rer $member->priority() ?
             $this->app->user()->setUsername($member->username());
+            $this->app->user()->setMail($this->managers->getManagerOf('Member')->getMail($member->username()));
 
-            $this->app->user()->setId($entier);//récupérer l'id du member
-            $this->app->user()->setFlash('Tu es connecté');
+            $this->app->user()->setId($entier);//rÃ©cupÃ©rer l'id du member
+            $this->app->user()->setFlash('Tu es connectÃ©');
+            var_dump($_SESSION['mail']);
             $this->app->httpResponse()->redirect('.');
         }
         $this->page->addVar('title', 'Connexion');

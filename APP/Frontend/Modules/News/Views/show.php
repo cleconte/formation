@@ -32,6 +32,4 @@ foreach ($comments as $comment)
 <?php
 }
 ?>
-<?php if($user->isMember()) {?>
 <p><a href="commenter-<?= $news['id'] ?>.html">Ajouter un commentaire</a></p>
-<?php } ?>

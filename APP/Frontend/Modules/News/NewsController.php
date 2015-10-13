@@ -68,17 +68,34 @@ class NewsController extends BackController
     // Si le formulaire a été envoyé.
     if ($request->method() == 'POST')
     {
-      $comment = new Comment([
-        'news' => $request->getData('news'),
-        'auteur' => $request->postData('auteur'),
-        'contenu' => $request->postData('contenu')
-      ]);
+      if(isset($_SESSION['user']))
+      {
+        $comment = new Comment([
+            'news' => $request->getData('news'),
+            'auteur'=>$this->app->user()->getAttribute('user'),
+            'mail'=>$this->app->user()->getAttribute('mail'),
+            'contenu' => $request->postData('contenu')
+        ]);
+      }
+      else
+      {
+        $comment = new Comment([
+            'news' => $request->getData('news'),
+            'auteur' => $request->postData('auteur'),
+            'mail' => $request->postData('mail'),
+            'contenu' => $request->postData('contenu')
+        ]);
+      }
     }
     else
     {
       $comment = new Comment;
     }
-
+    /*
+      var_dump($_SESSION['mail']);
+      var_dump($this->app->user()->getMail());
+        var_dump($comment->mail());
+      var_dump($comment);*/
     $formBuilder = new CommentFormBuilder($comment);
     $formBuilder->build();
  
@@ -137,7 +154,7 @@ class NewsController extends BackController
       if ($request->getExists('id') )
       {
         $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
-        if( $news ==null ){
+        if( $news == null ){
 
           $this->app->httpResponse()->redirect404();
         }

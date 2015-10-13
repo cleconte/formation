@@ -15,8 +15,10 @@ abstract class Application
     $this->httpResponse = new HTTPResponse($this);
     $this->user = new User($this);
     $this->config = new Config($this);
- 
+
+
     $this->name = '';
+
   }
  
   public function getController()
@@ -91,4 +93,5 @@ abstract class Application
   {
     return $this->user;
   }
+
 }
