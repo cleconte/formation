@@ -1,5 +1,6 @@
 <?php
 namespace App\Frontend\Modules\News;
+
 use \Model\NewsManagerPDO;
 
 use \OCFram\BackController;
@@ -8,9 +9,13 @@ use \OCFram\FormHandler;
 
 use \Entity\News;
 use \Entity\Comment;
+use \Entity\Tag;
+use \Entity\Tagd;
+
 
 use \FormBuilder\CommentFormBuilder;
 use \FormBuilder\NewsMemberFormBuilder;
+use \FormBuilder\TagFormBuilder;
 
 class NewsController extends BackController
 {
@@ -27,7 +32,7 @@ class NewsController extends BackController
     $manager = $this->managers->getManagerOf('News');
  
     $listeNews = $manager->getList(0, $nombreNews);
- 
+    $ListTag =  array();
     foreach ($listeNews as $news)
     {
       if (strlen($news->contenu()) > $nombreCaracteres)
@@ -36,27 +41,51 @@ class NewsController extends BackController
         $debut = substr($debut, 0, strrpos($debut, ' ')) . '...';
  
         $news->setContenu($debut);
+
       }
+
+      //Insertion des tags ??
+      $managerTag = $this->managers->getManagerOf('Tag');
+      $Listtagtemporary = $managerTag->getListOf($news->id());
+
+
+      $ListTag=array_merge($ListTag, $Listtagtemporary);
+
     }
- 
+
     // On ajoute la variable $listeNews à la vue.
     $this->page->addVar('listeNews', $listeNews);
+    // et aussi la liste des tags
+    $this->page->addVar('tags', $ListTag);
   }
  
   public function executeShow(HTTPRequest $request)
   {
-    $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
+    $managerNews = $this->managers->getManagerOf('News');
+    $managerComments = $this->managers->getManagerOf('Comments');
+    $managerMember = $this->managers->getManagerOf('Member');
+
+
+    $news = $managerNews->getUnique($request->getData('id'));
  
     if (empty($news) ||$news ==null){
       $this->app->httpResponse()->redirect404();
     }
 
-    $ListComments=$this->managers->getManagerOf('Comments')->getListOf($news->id());
 
-    $this->page->addVar('id',$this->managers->getManagerOf('Member')->getID($news->auteur()));
+    $ListComments = $managerComments->getListOf($news->id());
+
+
+    $this->page->addVar('id',$managerMember->getID($news->auteur()));
     $this->page->addVar('title', $news->titre());
     $this->page->addVar('news', $news);
     $this->page->addVar('comments', $ListComments);
+
+    //Insertion des tags
+
+    $managerTag = $this->managers->getManagerOf('Tag');
+    $ListTag = $managerTag->getListOf($news->id());
+    $this->page->addVar('tags', $ListTag);
   }
  
   public function executeInsertComment(HTTPRequest $request)
@@ -137,18 +166,41 @@ class NewsController extends BackController
 
   public function processForm(HTTPRequest $request)
   {
+
+    //manager news
+    $managersNews =$this->managers->getManagerOf('News');
+
+    // manager tag
+    $managersTag=$this->managers->getManagerOf('Tag');
+
     if ($request->method() == 'POST')
     {
-      $news = new News([ //$this->managers->getManagerOf('Members')->getUsername($_SESSION['id']), //récupérer le nom d'utilisateur si c'est pas un admin sinon laisser en postdata
-          //$this->managers->getManagerOf('Members')->getUsername($this->app->user()->getAttribute("id")
-          'auteur'=>$this->app->user()->getAttribute('user'),
-          'titre' => $request->postData('titre'),
-          'contenu' => $request->postData('contenu')
-      ]);
+      // Éléménet News
+      $news = new News([
+        'auteur'=>$this->app->user()->getAttribute('user'),
+        'titre' => $request->postData('titre'),
+        'contenu' => $request->postData('contenu')
+    ]);
+      // Élément Tag
+      if($request->postData('name')!='')
+      {
+
+        $tag = new Tag([
+            'name' => $request->postData('name')]);
+        $table=NewsController::separateTag($tag->name()); //vraiment ici ?
+        //var_dump($table);
+        //var_dump(count($table));
+
+        //on sauvegarde tout les tags rentré si ils n'existes pas
+        NewsController::saveTag($table,$managersTag);
+      }else{
+        $tag = new Tag;
+      }
 
       if ($request->getExists('id'))
       {
         $news->setId($request->getData('id'));
+        $tag = new Tag;
       }
     }
     else
@@ -156,34 +208,68 @@ class NewsController extends BackController
       // L'identifiant de la news est transmis si on veut la modifier
       if ($request->getExists('id') )
       {
-        $news = $this->managers->getManagerOf('News')->getUnique($request->getData('id'));
+        $news = $managersNews->getUnique($request->getData('id'));
+
+        $tag = new Tag;
         if( $news == null ){
 
           $this->app->httpResponse()->redirect404();
         }
-
       }
       else
       {
         $news = new News;
+        $tag = new Tag;
       }
     }
 
-    $formBuilder = new NewsMemberFormBuilder($news);
-    $formBuilder->build();
+    //construction formulaire news
+    $formBuilderNews = new NewsMemberFormBuilder($news);
+    $formBuilderNews->build();
 
-    $form = $formBuilder->form();
 
-    $formHandler = new FormHandler($form, $this->managers->getManagerOf('News'), $request);
+    $formNews = $formBuilderNews->form();
 
-    if ($formHandler->process())
-    {
-      $this->app->user()->setFlash($news->isNew() ? 'La news a bien été ajoutée !' : 'La news a bien été modifiée !');
+    $formHandlerNews = new FormHandler($formNews, $managersNews, $request);
 
+    //Construction formulaire Tag
+    $formBuilderTag = new TagFormBuilder($tag); // même formbuilder ?
+    $formBuilderTag->build($managersTag);
+
+
+    $formTag = $formBuilderTag->form();
+
+
+    $formHandlerTag = new FormHandler($formTag, $managersTag, $request); // j'utilise ma fonction save pour les save
+
+
+
+    // manager tagd
+    $managersTagd=$this->managers->getManagerOf('Tagd');
+
+
+    if ($formHandlerNews->process())
+    { //Refaire proprement le handler pour les tags
+      $this->app->user()->setFlash($news->isNew() ? 'La news a bien été ajoutée !'  : 'La news a bien été modifiée !');
+      // récupérer le dernier id de news
+      if($news->isNew()){
+
+      $news->setId($managersNews->getlastid());
+      }
+      var_dump($news->id());
+      foreach ($table as $key => $value) {
+
+        $idtag= $managersTag->getId($value);
+        $tagd = new Tagd;
+
+        $tagd->setIdnew($news->id());
+        $tagd->setIdtag($idtag);
+        $managersTagd->add($tagd);
+      }
       $this->app->httpResponse()->redirect('.');
     }
-
-    $this->page->addVar('form', $form->createView());
+    $this->page->addVar('formNews', $formNews->createView());
+    $this->page->addVar('formTag', $formTag->createView());
   }
 
   public function executeDelete(HTTPRequest $request)
@@ -198,8 +284,57 @@ class NewsController extends BackController
       $this->managers->getManagerOf('News')->delete($newsId);
       $this->managers->getManagerOf('Comments')->deleteFromNews($newsId);
 
+      $this->managers->getManagerOf('Tagd')->deleteFromNews($newsId);
       $this->app->user()->setFlash('La news a bien été supprimée !');
 
       $this->app->httpResponse()->redirect('.');
   }
+
+
+  public static function separateTag($name) // utiliser la function explode
+  {
+    $tableau = array();
+    $name = trim($name);
+
+    while (strpos($name,' ')!== false)
+    {
+      $ajout= substr($name,0,strpos($name,' '));
+      array_push($tableau,$ajout);
+      $name= substr($name,strpos($name,' ')+1);
+    }
+    array_push($tableau,$name);
+
+    return $tableau;
+  }
+
+  public static function saveTag($tableau,$managers)
+  {
+    if(is_array($tableau)){
+      $i=0;
+      $count=count($tableau);
+      while($i<$count)
+      {
+        if($managers->countTag($tableau[$i])<1)
+        {
+          $managers->addTag($tableau[$i]);
+        }
+        //si ça n'appartiens pas a la table des tags, l'ajouter
+        $i++;
+      }
+      return true;
+    }
+    else return false;
+  }
+
 }
+
+/*
+Tu dois générere cette immondice :
+
+
+INSERT INTO T_NEW_tagc (NTC_name)
+SELECT name
+FROM (SELECT 'php' as name UNION SELECT 'sql' as name) AS A
+LEFT OUTER JOIN T_NEW_tagc AS B ON A.name = B.NTC_name
+WHERE B.NTC_id IS NULL
+*/

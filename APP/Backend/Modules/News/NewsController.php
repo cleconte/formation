@@ -34,7 +34,7 @@ class NewsController extends BackController
       if($commentsId == null){
           $this->app->httpResponse()->redirect404();
       }
-      $this->managers->getManagerOf('Comments')->delete($commentsId );
+      $this->managers->getManagerOf('Comments')->delete($request->getData('id') );
 
       $this->app->user()->setFlash('Le commentaire a bien été supprimé !');
     $this->app->httpResponse()->redirect('.');
@@ -73,6 +73,7 @@ class NewsController extends BackController
       $comment = new Comment([
         'id' => $request->getData('id'),
         'auteur' => $request->postData('auteur'),
+          'mail' => $request->postData('mail'),
         'contenu' => $request->postData('contenu')
       ]);
     }

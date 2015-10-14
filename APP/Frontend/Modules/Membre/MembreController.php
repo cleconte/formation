@@ -23,6 +23,7 @@ class MembreController extends  BackController
             $id=$request->getData('id');
 
             $manager = $this->managers->getManagerOf('Member');
+
             $auteur=$manager->getusername($id);
         // petite fonction qui permet de vérifié si le paramètre dans l'url n'est pas le pseudo du membre au lieu de l'id
         // si c'est le cas alors on remplace le nom par l'id.
@@ -41,7 +42,6 @@ class MembreController extends  BackController
 
 
             if($auteur!==false) {
-
                 // Récupéré l'id du membre que l'on veux voir, et avec récupérer le nom, puis appliquer ce que l'on souhaite dans membre
                 $member = new Member([
                     'username' => $manager->getusername($id),

@@ -20,8 +20,8 @@ class NewsMemberFormBuilder extends FormBuilder
                 'name' => 'titre',
                 'maxLength' => 100,
                 'validators' => [
-                    new MaxLengthValidator('Le titre spécifié est trop long (100 caractères maximum)', 100),
-                    new NotNullValidator('Merci de spécifier le titre de la news'),
+                    new MaxLengthValidator('Le titre spï¿½cifiï¿½ est trop long (100 caractï¿½res maximum)', 100),
+                    new NotNullValidator('Merci de spï¿½cifier le titre de la news'),
                 ],
             ]))
             ->add(new TextField([
@@ -30,8 +30,21 @@ class NewsMemberFormBuilder extends FormBuilder
                 'rows' => 8,
                 'cols' => 60,
                 'validators' => [
-                    new NotNullValidator('Merci de spécifier le contenu de la news'),
+                    new NotNullValidator('Merci de spï¿½cifier le contenu de la news'),
                 ],
             ]));
+    }
+    public function buildtag(){
+        $tag = new StringField([
+            'label' => 'Tag',
+            'name' => 'tag',
+            'maxLength' => 100,
+            'validators' => [
+                //attention aux validator
+                true
+            ]]);
+
+        $this->form
+            ->add($tag);
     }
 }

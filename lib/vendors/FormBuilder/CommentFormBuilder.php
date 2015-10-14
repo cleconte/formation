@@ -1,12 +1,14 @@
 <?php
 namespace FormBuilder;
  
+use OCFram\CaractereValidator;
 use \OCFram\FormBuilder;
 use \OCFram\StringField;
 use \OCFram\TextField;
 use \OCFram\MaxLengthValidator;
 use \OCFram\NotNullValidator;
 use \OCFram\MailValidator;
+use \OCFram\MCaractereValidator;
  
 class CommentFormBuilder extends FormBuilder
 {
@@ -35,7 +37,8 @@ class CommentFormBuilder extends FormBuilder
               'maxLength' => 20,
               'validators' => [
                   new MaxLengthValidator('Le pseudo spécifie est trop long(20 caratères maximum)', 20),//pseudo trop long
-                  new NotNullValidator('Je dois deviner ton pseudo?')
+                  new NotNullValidator('Je dois deviner ton pseudo?'),
+                  new CaractereValidator('Un des caractères n\'a pas le bon format')
               ],
           ]);
 

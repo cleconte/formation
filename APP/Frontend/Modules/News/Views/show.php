@@ -1,8 +1,34 @@
 
 <p>Par <a href="../Membre-<?= $id ?>" ><em><?= $news['auteur'] ?></em></a>, le <?= $news['dateAjout']->format('d/m/Y à H\hi') ?></p>
+
 <h2><?= $news['titre'] ?></h2>
+
 <p><?= nl2br($news['contenu']) ?></p>
- 
+
+<fieldset>
+  <legend>
+    <strong>TAG</strong>
+  </legend>
+  <p><?php
+      $i = 0;
+      foreach($tags as $tag)
+      {
+          if($tag[1]== $news['id']&&$i<5)
+          {
+              echo ' ' . $tag[0] ;$i++;
+          }
+      }
+      if($i==0)
+      {
+          echo'il n\'y a pas de tag';
+      }?>
+  </p>
+</fieldset>
+</br>
+
+
+<h3>Commentaires</h3>
+
 <?php if ($news['dateAjout'] != $news['dateModif']) { ?>
   <p style="text-align: right;"><small><em>Modifiée le <?= $news['dateModif']->format('d/m/Y à H\hi') ?></em></small></p>
 <?php } ?>

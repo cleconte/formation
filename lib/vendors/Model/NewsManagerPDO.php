@@ -99,6 +99,10 @@ class NewsManagerPDO extends NewsManager
     return $q->fetch();
   }
 
+  public function getlastid(){ //erreur probable
+    return $this->dao->query('SELECT id FROM News ORDER BY id DESC')->fetchColumn();
+  }
+
   public function getListMember($auteur)
   {
     $req = $this->dao->prepare("SELECT id, auteur, titre, contenu, dateAjout, dateModif FROM news WHERE auteur = :auteur ORDER BY id DESC");

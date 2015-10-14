@@ -22,6 +22,8 @@
   <route url="/Membre-([0-9a-zA-Z]+)/Comments" module="Membre" action="Comments" vars="id" />
 
 
+  <route url="/Tag" module="Tag" action="index" />
+
   <route url="/Connexion" module="Connexion" action="index" />
 
   <route url="/Deconnexion" module="Deconnexion" action="index" />

@@ -19,7 +19,7 @@ class AutorFormBuilder extends FormBuilder
             'name' => 'username',
             'maxLength' => 20,
             'validators' => [
-                new MaxLengthValidator('Le pseudo spécifie est trop long(20 caratères maximum)', 20),//pseudo trop long
+                new MaxLengthValidator('Le pseudo spï¿½cifie est trop long(20 caratï¿½res maximum)', 20),//pseudo trop long
                 new NotNullValidator('Je dois deviner ton pseudo?'),
                 new VerifyUsernameValidator('Ton pseudo n\'est pas bon',func_get_arg(0)), // le message d'erreur ne s'affiche pas
             ],
@@ -32,13 +32,13 @@ class AutorFormBuilder extends FormBuilder
             'name' => 'password',
             'maxLength' => 30,
             'validators' => [
-                new MaxLengthValidator('Le mdp spécifié est trop long (100 caractères maximum)', 30),// vérifier que le mdp pour le pseudo est valide
+                new MaxLengthValidator('Le mdp spï¿½cifiï¿½ est trop long (100 caractï¿½res maximum)', 30),// vï¿½rifier que le mdp pour le pseudo est valide
                 new NotNullValidator('Je dois deviner ton mot de passe ? '),
                 new VerifyPasswordValidator('C\'est pas le bon mot de passe bro',func_get_arg(0),$username->value()),
             ],
         ]);
 
         $this->form->add($password);
-        //     new VerifyPseudoValidator('Le pseudo spécifié n\'existe pas'),
+        //     new VerifyPseudoValidator('Le pseudo spï¿½cifiï¿½ n\'existe pas'),
     }
 }
