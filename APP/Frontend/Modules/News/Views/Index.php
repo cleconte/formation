@@ -23,7 +23,10 @@ foreach ($listeNews as $news)
         {
           if($tag[1]== $news['id']&&$i<5)
           {
-            echo ' ' . $tag[0] ;$i++;
+            $i++;
+              ?>
+                <a href="Tag-<?= $tag[2] ?>"><?= ' ' . $tag[0] ?></a>
+              <?php
           }
         }
         if($i==0)
