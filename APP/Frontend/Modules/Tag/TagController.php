@@ -68,4 +68,25 @@ class TagController extends BackController
         else return false;
     }
 
+    public function executeShowNews(HTTPRequest $request){
+
+        $managertag= $this->managers->getManagerOf('Tag');
+        // Si le numéro de tag exist :
+        $idtag=$request->getData('id');
+
+        $tagname = $managertag->getname($idtag);
+        if($tagname != false){
+
+            $ListTag = $managertag->getListOfNews($idtag);
+
+            $this->page->addVar('ListNewsTag', $ListTag);
+            $this->page->addVar('nametag', $tagname);
+        }
+        else{
+            $this->page->addVar('undefined', 1);
+        }
+
+
+    }
+
 }

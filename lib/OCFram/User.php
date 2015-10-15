@@ -99,6 +99,7 @@ class User
         session_unset ();
 
 // On détruit notre session
+      throw new \exception ;
         session_destroy ();
     }
 

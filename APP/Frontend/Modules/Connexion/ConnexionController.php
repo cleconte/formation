@@ -31,20 +31,19 @@ class ConnexionController extends BackController
 
         $formHandler = new FormHandler($form, $this->managers->getManagerOf('Member'), $request);
         $entier=(int)$this->managers->getManagerOf('Member')->getId($member->username());
+
+
         if ($formHandler->process())
         {
-            //$this->app->user()->setAuthenticated(true);
-            //$stg = 'Bienvenue'.$this->member->username();
-            //$this->app->user()->setFlash(execute($stg));
-
 
             $this->app->user()->setMember(1); // on met 1 pour auteur, il faudrait le faire dynamiquement ? (récupérer $member->priority() ?
             $this->app->user()->setUsername($member->username());
-            $this->app->user()->setMail($this->managers->getManagerOf('Member')->getMail($member->username()));
+
 
             $this->app->user()->setId($entier);//récupérer l'id du member
+
             $this->app->user()->setFlash('Tu es connecté');
-            var_dump($_SESSION['mail']);
+
             $this->app->httpResponse()->redirect('.');
         }
         $this->page->addVar('title', 'Connexion');

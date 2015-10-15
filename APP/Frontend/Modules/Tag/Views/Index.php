@@ -1,7 +1,4 @@
-<?php
-$test='ééééaaaoù';
-echo $test;
-?>
+
 <h2>Tag</h2>
 
 <form action="" method="post">

@@ -21,6 +21,9 @@ class NewsController extends BackController
 {
   public function executeIndex(HTTPRequest $request)
   {
+
+    var_dump($_SESSION);
+    //var_dump($this->app->user());
     $nombreNews = $this->app->config()->get('nombre_news');
     $nombreCaracteres = $this->app->config()->get('nombre_caracteres');
 
@@ -87,7 +90,7 @@ class NewsController extends BackController
     $ListTag = $managerTag->getListOf($news->id());
     $this->page->addVar('tags', $ListTag);
   }
- 
+
   public function executeInsertComment(HTTPRequest $request)
   {
     // si la news dans laquelle on veut insérer n'existe pas, redirection

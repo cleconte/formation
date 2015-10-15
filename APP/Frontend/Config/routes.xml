@@ -23,6 +23,7 @@
 
 
   <route url="/Tag" module="Tag" action="index" />
+  <route url="/Tag-([0-9]+)" module="Tag" action="ShowNews" vars="id"  />
 
   <route url="/Connexion" module="Connexion" action="index" />
 

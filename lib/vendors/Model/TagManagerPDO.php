@@ -18,7 +18,6 @@ class TagManagerPDO extends TagManager
     }
 
 
-
     public function addTag($nametag)
     {
         $q = $this->dao->prepare('INSERT INTO T_NEW_tagc SET NTC_name = :name');
@@ -89,12 +88,7 @@ class TagManagerPDO extends TagManager
 
     public function getListOf($idnews)
     {
-        if (!ctype_digit($idnews))
-        {
-            throw new \InvalidArgumentException('L\'identifiant de la news passé doit être un nombre entier valide');
-        }
-
-        $q = $this->dao->prepare('SELECT NTC_name, NTD_fk_new  FROM T_NEW_tagd INNER JOIN T_NEW_tagc on NTC_id=NTD_fk_NTC WHERE NTD_fk_new = :idnews GROUP BY NTC_name');
+        $q = $this->dao->prepare('SELECT NTC_name, NTD_fk_new, NTC_id FROM T_NEW_tagd INNER JOIN T_NEW_tagc on NTC_id=NTD_fk_NTC WHERE NTD_fk_new = :idnews GROUP BY NTC_name');
         $q->bindValue(':idnews', $idnews, \PDO::PARAM_INT);
         $q->execute();
 
@@ -102,5 +96,22 @@ class TagManagerPDO extends TagManager
 
         return $tag;
     }
+
+    public function getListOfNews($idtag)
+    {
+        $q = $this->dao->prepare('SELECT id, auteur, titre, contenu  FROM T_NEW_tagd INNER JOIN news on NTD_fk_new=news.id WHERE NTD_fk_NTC = :idtag GROUP BY id');
+        $q->bindValue(':idtag', $idtag);
+        $q->execute();
+
+        $tag = $q->fetchAll();
+
+        return $tag;
+    }
+
+    public function getname($id){ //erreur probable
+    return $this->dao->query("SELECT NTC_name FROM T_NEW_tagc WHERE NTC_id = '$id'")->fetchColumn();
+    }
+
+
 
 }
