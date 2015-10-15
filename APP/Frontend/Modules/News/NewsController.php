@@ -254,7 +254,7 @@ class NewsController extends BackController
 
       $news->setId($managersNews->getlastid());
       }
-      var_dump($news->id());
+      //var_dump($news->id());
 
       NewsController::saveTag($table,$managersTag);
       foreach ($table as $key => $value) {
@@ -293,13 +293,16 @@ class NewsController extends BackController
   public function executegetNewComments(HTTPRequest $request)
   {
 
-    $news_id = (int)$request->getData('news_id');
-    $comment_id_last = (int)$request->getData('comment_id_last');
-
+    $news_id = (int)$request->postData('newsid');
+    $comment_id_last = (int)$request->postData('commentlastid');
+    //$news_id = 49;
+    //$comment_id_last = (int)30;
     $managernews= $this->managers->getManagerOf('News');
     $ListLastComm = $managernews->getListNewComments($news_id,$comment_id_last) ;
     $ListLastComm = json_encode($ListLastComm);
+
     echo $ListLastComm;
+
     exit();
   }
 

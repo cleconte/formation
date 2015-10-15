@@ -1,23 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <p>Par <a href="../Membre-<?= $id ?>" ><em><?= $news['auteur'] ?></em></a>, le <?= $news['dateAjout']->format('d/m/Y à H\hi') ?></p>
 
 <h2><?= $news['titre'] ?></h2>
@@ -93,11 +73,19 @@ foreach ($comments as $comment)
 
 <script type="text/javascript">
 
+
+
     $('#test').click(function() {
         var newsid = '<?php echo $news['id']; ?>';
         alert( newsid);
 
         var commentlastid = '<?php echo $comments[0]['id']; ?>';
         alert( commentlastid);
+
+
+        $.post( '/getNewComments', {newsid: newsid, commentlastid: commentlastid }, function( data ) {
+            alert( data );
+        }
+        });
     });
 </script>
