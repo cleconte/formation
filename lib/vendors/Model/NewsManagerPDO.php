@@ -9,9 +9,9 @@ class NewsManagerPDO extends NewsManager
   {
     $requete = $this->dao->prepare('INSERT INTO news SET auteur = :auteur, titre = :titre, contenu = :contenu, dateAjout = NOW(), dateModif = NOW()');
  
-    $requete->bindValue(':titre', $news->titre());
-    $requete->bindValue(':auteur', $news->auteur());
-    $requete->bindValue(':contenu', $news->contenu());
+    $requete->bindValue(':titre', htmlspecialchars($news->titre()));
+    $requete->bindValue(':auteur', htmlspecialchars($news->auteur()));
+    $requete->bindValue(':contenu', htmlspecialchars($news->contenu()));
  
     $requete->execute();
   }

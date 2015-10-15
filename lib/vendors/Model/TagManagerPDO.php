@@ -10,7 +10,7 @@ class TagManagerPDO extends TagManager
     {
         $q = $this->dao->prepare('INSERT INTO T_NEW_tagc SET NTC_name = :name');
 
-        $q->bindValue(':name', $nametag, \PDO::PARAM_INT);
+        $q->bindValue(':name', htmlspecialchars($nametag), \PDO::PARAM_INT);
 
         $q->execute();
 
@@ -23,7 +23,7 @@ class TagManagerPDO extends TagManager
     {
         $q = $this->dao->prepare('INSERT INTO T_NEW_tagc SET NTC_name = :name');
 
-        $q->bindValue(':name', $nametag, \PDO::PARAM_INT);
+        $q->bindValue(':name', htmlspecialchars($nametag), \PDO::PARAM_INT);
 
         $q->execute();
 

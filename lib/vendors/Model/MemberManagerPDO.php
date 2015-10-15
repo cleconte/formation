@@ -7,18 +7,18 @@ class MemberManagerPDO extends MemberManager
 {
 
     const mmc_priority_admin = 2;
-//vérifie que le login rentré existe et retourner la priorité dans ces cas là
+//vï¿½rifie que le login rentrï¿½ existe et retourner la prioritï¿½ dans ces cas lï¿½
 
-// Attention pseudo ou id , unicité sur pseudo ?
+// Attention pseudo ou id , unicitï¿½ sur pseudo ?
 
     protected function add(Member $member)
     {
         $requete = $this->dao->prepare('INSERT INTO T_mem_memberc SET mmc_username = :username, mmc_password = :password, mmc_description = :description, mmc_mail = :mail');
 
-        $requete->bindValue(':username', $member->username());
-        $requete->bindValue(':password', $member->password());
-        $requete->bindValue(':description', $member->description());
-        $requete->bindValue(':mail', $member->mail());
+        $requete->bindValue(':username', htmlspecialchars($member->username()));
+        $requete->bindValue(':password', htmlspecialchars($member->password()));
+        $requete->bindValue(':description', htmlspecialchars($member->description()));
+        $requete->bindValue(':mail', htmlspecialchars($member->mail()));
 
         $requete->execute();
     }
@@ -82,7 +82,7 @@ class MemberManagerPDO extends MemberManager
         return $this->dao->query("SELECT mmc_id FROM T_mem_memberc WHERE mmc_username = '$username'")->fetchColumn();
     }
 
-    public function getMail($username){ //erreur probable (insertion sql)
+    public function getMail($username){ //erreur probable
         return $this->dao->query("SELECT mmc_mail FROM T_mem_memberc WHERE mmc_username = '$username'")->fetchColumn();
     }
 
