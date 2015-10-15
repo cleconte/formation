@@ -1,4 +1,23 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>Par <a href="../Membre-<?= $id ?>" ><em><?= $news['auteur'] ?></em></a>, le <?= $news['dateAjout']->format('d/m/Y à H\hi') ?></p>
 
 <h2><?= $news['titre'] ?></h2>
@@ -65,3 +84,20 @@ foreach ($comments as $comment)
 }
 ?>
 <p><a href="commenter-<?= $news['id'] ?>.html">Ajouter un commentaire</a></p>
+
+
+<input type="submit" id="test" value="Recharger" />
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    $('#test').click(function() {
+        var newsid = '<?php echo $news['id']; ?>';
+        alert( newsid);
+
+        var commentlastid = '<?php echo $comments[0]['id']; ?>';
+        alert( commentlastid);
+    });
+</script>

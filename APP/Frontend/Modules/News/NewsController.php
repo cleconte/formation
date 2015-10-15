@@ -60,7 +60,6 @@ class NewsController extends BackController
     // et aussi la liste des tags
     $this->page->addVar('tags', $ListTag);
 
-    //NewsController::executegetNewComments(49,25);
   }
  
   public function executeShow(HTTPRequest $request)
@@ -291,12 +290,17 @@ class NewsController extends BackController
       $this->app->httpResponse()->redirect('.');
   }
 
-  public function executegetNewComments($news_id, $comment_id_last)
+  public function executegetNewComments(HTTPRequest $request)
   {
+
+    $news_id = (int)$request->getData('news_id');
+    $comment_id_last = (int)$request->getData('comment_id_last');
+
     $managernews= $this->managers->getManagerOf('News');
     $ListLastComm = $managernews->getListNewComments($news_id,$comment_id_last) ;
     $ListLastComm = json_encode($ListLastComm);
-    return $ListLastComm;
+    echo $ListLastComm;
+    exit();
   }
 
 
