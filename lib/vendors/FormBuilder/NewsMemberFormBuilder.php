@@ -34,6 +34,7 @@ class NewsMemberFormBuilder extends FormBuilder
                 ],
             ]));
     }
+
     public function buildtag(){
         $tag = new StringField([
             'label' => 'Tag',

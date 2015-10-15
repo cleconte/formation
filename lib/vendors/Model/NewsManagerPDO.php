@@ -123,6 +123,25 @@ class NewsManagerPDO extends NewsManager
     return $listeNews;
   }
 
+  public function getListNewComments($news_id,$comment_id_last)
+  {
+    $req = $this->dao->prepare("
+    SELECT b.id, b.news, b.auteur, b.contenu, b.date
+    FROM comments as b
+    WHERE b.news = :newsid and b.date > (SELECT co.date as ter FROM comments as co  where co.id = :commentlast)
+    ORDER BY b.date DESC");
+    $req->execute(array(
+        ':newsid' => $news_id,
+        ':commentlast' => $comment_id_last)
+    );
+
+    $listeNews = $req->fetchAll();
+
+    $req->closeCursor();
+
+    return $listeNews;
+  }
+
 
   public function countNewsMember($username)
   {

@@ -22,7 +22,6 @@ class NewsController extends BackController
   public function executeIndex(HTTPRequest $request)
   {
 
-    var_dump($_SESSION);
     //var_dump($this->app->user());
     $nombreNews = $this->app->config()->get('nombre_news');
     $nombreCaracteres = $this->app->config()->get('nombre_caracteres');
@@ -60,6 +59,8 @@ class NewsController extends BackController
     $this->page->addVar('listeNews', $listeNews);
     // et aussi la liste des tags
     $this->page->addVar('tags', $ListTag);
+
+    //NewsController::executegetNewComments(49,25);
   }
  
   public function executeShow(HTTPRequest $request)
@@ -187,15 +188,13 @@ class NewsController extends BackController
       // Élément Tag
       if($request->postData('name')!='')
       {
-
         $tag = new Tag([
             'name' => $request->postData('name')]);
         $table=NewsController::separateTag($tag->name()); //vraiment ici ?
         //var_dump($table);
         //var_dump(count($table));
 
-        //on sauvegarde tout les tags rentré si ils n'existes pas
-        NewsController::saveTag($table,$managersTag);
+        //on sauvegarde tout les tags rentré si ils n'existes pas !
       }else{
         $tag = new Tag;
       }
@@ -213,7 +212,6 @@ class NewsController extends BackController
       {
         $news = $managersNews->getUnique($request->getData('id'));
 
-        $tag = new Tag;
         if( $news == null ){
 
           $this->app->httpResponse()->redirect404();
@@ -222,8 +220,9 @@ class NewsController extends BackController
       else
       {
         $news = new News;
-        $tag = new Tag;
       }
+
+      $tag = new Tag;
     }
 
     //construction formulaire news
@@ -243,9 +242,6 @@ class NewsController extends BackController
     $formTag = $formBuilderTag->form();
 
 
-    $formHandlerTag = new FormHandler($formTag, $managersTag, $request); // j'utilise ma fonction save pour les save
-
-
 
     // manager tagd
     $managersTagd=$this->managers->getManagerOf('Tagd');
@@ -260,6 +256,8 @@ class NewsController extends BackController
       $news->setId($managersNews->getlastid());
       }
       var_dump($news->id());
+
+      NewsController::saveTag($table,$managersTag);
       foreach ($table as $key => $value) {
 
         $idtag= $managersTag->getId($value);
@@ -291,6 +289,14 @@ class NewsController extends BackController
       $this->app->user()->setFlash('La news a bien été supprimée !');
 
       $this->app->httpResponse()->redirect('.');
+  }
+
+  public function executegetNewComments($news_id, $comment_id_last)
+  {
+    $managernews= $this->managers->getManagerOf('News');
+    $ListLastComm = $managernews->getListNewComments($news_id,$comment_id_last) ;
+    $ListLastComm = json_encode($ListLastComm);
+    return $ListLastComm;
   }
 
 
