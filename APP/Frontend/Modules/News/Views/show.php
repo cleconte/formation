@@ -28,6 +28,8 @@
 </fieldset>
 </br>
 
+<p><a href="commenter-<?= $news['id'] ?>.html">Ajouter un commentaire</a></p>
+
 
 <h3>Commentaires</h3>
 <div  class="inner"">Afficher ici</div>
@@ -64,10 +66,12 @@ foreach ($comments as $comment)
 <?php
 }
 ?>
-<p><a href="commenter-<?= $news['id'] ?>.html">Ajouter un commentaire</a></p>
 
+<button id="bt-voirplus" type="button" class="old-comment">
+    Voir plus
+</button>
 
-<input type="submit" id="test" value="Recharger" />
+</br>
 
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>

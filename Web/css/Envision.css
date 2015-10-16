@@ -382,7 +382,7 @@ nav ul li#current a {
 #sidebar ul.sidemenu ul { margin: 0 0 0 5px; padding: 0; }
 #sidebar ul.sidemenu ul li { background: none; }
  
- 
+
 /* Footer */	
 footer {
 	color: #C6DDEE;
@@ -411,5 +411,16 @@ footer a {
 
 /* Barre menu profil */
 ul#profilmenu li {display:inline;}
+
+/* Définir visibilité du bouton voir plus des commentaires */
+button.old-comment {
+	display:block;
+	visibility: visible;
+	width:100px;
+	line-height:20px;
+	text-align:center;
+	vertical-align:middle;
+}
+/*hidden*/
  
  

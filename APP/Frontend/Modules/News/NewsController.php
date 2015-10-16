@@ -81,6 +81,7 @@ class NewsController extends BackController
     $ListComments = $managerComments->getListOf($news->id());
 
     $ListComments = array_slice($ListComments, 0, $nombrecommentaireshow);
+    $this->page->addVar('comments', $ListComments);
 
     $this->page->addVar('id',$managerMember->getID($news->auteur()));
     $this->page->addVar('title', $news->titre());
@@ -298,16 +299,29 @@ class NewsController extends BackController
 
     $news_id = (int)$request->postData('newsid');
     $comment_id_last = (int)$request->postData('commentlastid');
-    //$news_id = 49;
-    //$comment_id_last = (int)56;
+
     $managernews= $this->managers->getManagerOf('News');
+
     $ListLastComm = $managernews->getListNewComments($news_id,$comment_id_last) ;
-    $Listjson = json_encode($ListLastComm);
-    echo $Listjson;
+    $ListLastComm = json_encode($ListLastComm);
+    echo $ListLastComm;
 
     exit();
   }
+  public function executegetOldComments(HTTPRequest $request)
+  {
 
+    $news_id = (int)$request->postData('newsid');
+    $comment_id_last = (int)$request->postData('commentidold');
+
+    $managernews= $this->managers->getManagerOf('News');
+
+    $ListOldComm = $managernews->getListOldComments($news_id,$comment_id_last) ;
+    $ListOldComm = json_encode($ListOldComm);
+    echo $ListOldComm;
+
+    exit();
+  }
 
   public static function separateTag($name) // utiliser la function explode
   {
