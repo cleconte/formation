@@ -95,66 +95,67 @@ if (empty($comments))
         setInterval('affiche_last()', 3000);
     });
 
-    function affiche_last()
-    {
-        var newsid = $('.news').attr('data-id');
-        var commentlastid = $('.comment:first').attr('data-id');
-        $.post('/getNewComments', {newsid: newsid, commentlastid: commentlastid}, function (data) {
+    function affichercommentaire(comment){
 
-            $.each(data, function (index, comment) {
-
-                $('<fieldset></fieldset>')
-                    .addClass('comment')
-                    .attr('data-id',comment.id)
-                    .append(
-                        $('<legend></legend>')
-                                .append(
-                                    'Poste par ',
-                                    $('<a></a>')
-                                        .attr('href','/member-' + comment.auteur + '.html')
-                                        .html( comment.auteur)
-                                        .css('font-weight','bold'),
-                                    ' le ' + comment.date
-                                ),
-                        $('<p></p>')
-                            .html(comment.contenu)
-                        )
-                .insertBefore('.comment:first');
-            })
-
-        },'json');
-    };
-
-    function cacherbouton(){
-        $(".old-comment").css("visibility", "hidden");
-    }
-
-    function affiche_old()
-    {
-        var newsid = $('.news').attr('data-id');
-        var commentoldid = $('.comment:last').attr('data-id');
-        $.post('/getOldComments', {newsid: newsid, commentidold: commentoldid}, function (data)
-        {
-            $.each(data, function (index, comment)
-            {
-                if(index<5) {
-                    $('<fieldset></fieldset>')
+        var pistache = $('<fieldset></fieldset>')
                         .addClass('comment')
-                        .attr('data-id', comment.id)
+                        .attr('data-id',comment.id)
                         .append(
                         $('<legend></legend>')
                             .append(
                             'Poste par ',
                             $('<a></a>')
-                                .attr('href', '/member-' + comment.auteur + '.html')
-                                .html(comment.auteur)
-                                .css('font-weight', 'bold'),
+                                .attr('href','/member-' + comment.auteur + '.html')
+                                .html( comment.auteur)
+                                .css('font-weight','bold'),
                             ' le ' + comment.date
-                        ),
+                            ),
                         $('<p></p>')
                             .html(comment.contenu)
-                    )
-                        .insertAfter('.comment:last');
+                        );
+        return pistache;
+
+
+    }
+
+    function getvariablecomments(where){
+
+        var newsid = $('.news').attr('data-id');
+        var commentoldid = $('.comment:'+where+'').attr('data-id');
+
+        variable = [newsid,commentoldid];
+        return variable;
+    }
+
+    function cacherbouton(){
+        $(".old-comment").css("visibility", "hidden");
+    }
+
+    function affiche_last()
+    {
+
+        var variable = getvariablecomments('first');
+        $.post('/getNewComments', {newsid: variable[0], commentid: variable[1]}, function (data) {
+
+            $.each(data, function (index, comment) {
+
+                affichercommentaire(comment).insertBefore('.comment:first');
+            })
+
+        },'json');
+    };
+
+
+    function affiche_old()
+    {
+        var variable = getvariablecomments('last');
+
+        $.post('/getOldComments', {newsid: variable[0], commentid: variable[1]}, function (data)
+        {
+            $.each(data, function (index, comment)
+            {
+                if(index<5) {
+                    affichercommentaire(comment).insertAfter('.comment:last');
                 }
 
                 indexmax=index;

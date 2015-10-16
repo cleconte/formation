@@ -298,7 +298,7 @@ class NewsController extends BackController
   {
 
     $news_id = (int)$request->postData('newsid');
-    $comment_id_last = (int)$request->postData('commentlastid');
+    $comment_id_last = (int)$request->postData('commentid');
 
     $managernews= $this->managers->getManagerOf('News');
 
@@ -312,7 +312,7 @@ class NewsController extends BackController
   {
 
     $news_id = (int)$request->postData('newsid');
-    $comment_id_last = (int)$request->postData('commentidold');
+    $comment_id_last = (int)$request->postData('commentid');
 
     $managernews= $this->managers->getManagerOf('News');
 
@@ -322,6 +322,8 @@ class NewsController extends BackController
 
     exit();
   }
+
+
 
   public static function separateTag($name) // utiliser la function explode
   {

@@ -129,7 +129,7 @@ class NewsManagerPDO extends NewsManager
     SELECT b.id, b.news, b.auteur, b.contenu, b.date
     FROM comments as b
     WHERE b.news = :newsid and b.date > (SELECT co.date as ter FROM comments as co  where co.id = :commentlast)
-    ORDER BY b.date DESC");
+    ORDER BY b.id DESC");
     $req->execute(array(
         ':newsid' => $news_id,
         ':commentlast' => $comment_id_last)
@@ -148,7 +148,7 @@ class NewsManagerPDO extends NewsManager
     SELECT  b.id, b.news, b.auteur, b.contenu, b.date
     FROM comments as b
     WHERE b.news = :newsid and b.date < (SELECT co.date as ter FROM comments as co  where co.id = :commentold)
-    ORDER BY b.date DESC
+    ORDER BY b.id DESC
     LIMIT 6");
     $req->execute(array(
             ':newsid' => $news_id,
