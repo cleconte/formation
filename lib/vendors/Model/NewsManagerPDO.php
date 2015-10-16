@@ -149,7 +149,7 @@ class NewsManagerPDO extends NewsManager
     FROM comments as b
     WHERE b.news = :newsid and b.date < (SELECT co.date as ter FROM comments as co  where co.id = :commentold)
     ORDER BY b.date DESC
-    LIMIT 5");
+    LIMIT 6");
     $req->execute(array(
             ':newsid' => $news_id,
             ':commentold' => $comment_id_old)

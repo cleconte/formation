@@ -73,6 +73,9 @@ if (empty($comments))
     Voir plus
 </button>
 
+    <button id="bt-voirplus" type="button" class="hidebutton" onClick="cacherbouton()">
+        cacher
+    </button>
 <?php } ?>
 
 </br>
@@ -122,33 +125,43 @@ if (empty($comments))
         },'json');
     };
 
+    function cacherbouton(){
+        $(".old-comment").css("visibility", "hidden");
+    }
 
     function affiche_old()
     {
         var newsid = $('.news').attr('data-id');
         var commentoldid = $('.comment:last').attr('data-id');
-        $.post('/getOldComments', {newsid: newsid, commentidold: commentoldid}, function (data) {
-
-            $.each(data, function (index, comment) {
-
-                $('<fieldset></fieldset>')
-                    .addClass('comment')
-                    .attr('data-id',comment.id)
-                    .append(
-                    $('<legend></legend>')
+        $.post('/getOldComments', {newsid: newsid, commentidold: commentoldid}, function (data)
+        {
+            $.each(data, function (index, comment)
+            {
+                if(index<5) {
+                    $('<fieldset></fieldset>')
+                        .addClass('comment')
+                        .attr('data-id', comment.id)
                         .append(
-                        'Poste par ',
-                        $('<a></a>')
-                            .attr('href','/member-' + comment.auteur + '.html')
-                            .html( comment.auteur)
-                            .css('font-weight','bold'),
-                        ' le ' + comment.date
-                    ),
-                    $('<p></p>')
-                        .html(comment.contenu)
-                )
-                    .insertAfter('.comment:last');
+                        $('<legend></legend>')
+                            .append(
+                            'Poste par ',
+                            $('<a></a>')
+                                .attr('href', '/member-' + comment.auteur + '.html')
+                                .html(comment.auteur)
+                                .css('font-weight', 'bold'),
+                            ' le ' + comment.date
+                        ),
+                        $('<p></p>')
+                            .html(comment.contenu)
+                    )
+                        .insertAfter('.comment:last');
+                }
+
+                indexmax=index;
             })
+            if(indexmax!=5){
+                cacherbouton();
+            }
         },'json');
     };
 
