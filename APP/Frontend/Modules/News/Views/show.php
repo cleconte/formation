@@ -30,6 +30,7 @@
 
 
 <h3>Commentaires</h3>
+<div  class="inner"">testcom</div>
 
 <?php if ($news['dateAjout'] != $news['dateModif']) { ?>
   <p style="text-align: right;"><small><em>Modifiée le <?= $news['dateModif']->format('d/m/Y à H\hi') ?></em></small></p>
@@ -52,8 +53,8 @@ foreach ($comments as $comment)
 
     Posté par <strong><a href="Membre-<?= $comment['auteur'] ?>"><?= htmlspecialchars($comment['auteur']) ?></a></strong> le <?= $comment['date']->format('d/m/Y à H\hi') ?>
 
-    <?php if ($user->isAuthenticated()) {?> -
-      <a href="../admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a> |
+    <?php if ($user->isAuthenticated()) {?>
+      <a href="../admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a>
       <a href="../admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
 
     <?php } ?>
@@ -69,23 +70,40 @@ foreach ($comments as $comment)
 <input type="submit" id="test" value="Recharger" />
 
 
+
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
 
 <script type="text/javascript">
 
-
-
     $('#test').click(function() {
-        var newsid = '<?php echo $news['id']; ?>';
-        alert( newsid);
+            var newsid = '<?php echo $news['id']; ?>';
+            alert(newsid);
 
-        var commentlastid = '<?php echo $comments[0]['id']; ?>';
-        alert( commentlastid);
+            var commentlastid = '<?php echo $comments[0]['id']; ?>';
+            alert(commentlastid);
 
 
-        $.post( '/getNewComments', {newsid: newsid, commentlastid: commentlastid }, function( data ) {
-            alert( data );
+            $.post('/getNewComments', {newsid: newsid, commentlastid: commentlastid}, function (data) {
+                alert(data);
+                console.log(data);
+                    $.each(data, function (index, value) {
+
+                        alert(index + ": " + value.auteur + value.id + value.date + value.contenu);
+                        var text = '<fieldset class="comment"><legend>Poste par: <a href="/member-' + value.auteur + '.html">' + value.auteur + '</a> le ' + value.date + '</legend><p>' + value.contenu + '</p></fieldset>';
+                        alert(text);
+
+                        $(".inner").append(text);
+                        console.log(text);
+                    });
+                },'json');
         }
-        });
-    });
+    );
 </script>
+<!--
+"id":"33","0":"33",
+"news":"49","1":"49",
+"auteur":"test6","2":"test6",
+"contenu":"testafficher json","3":"testafficher json",
+"date":"2015-10-15 17:09:07","4":"2015-10-15 17:09:07"}] -->

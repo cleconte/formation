@@ -299,9 +299,8 @@ class NewsController extends BackController
     //$comment_id_last = (int)30;
     $managernews= $this->managers->getManagerOf('News');
     $ListLastComm = $managernews->getListNewComments($news_id,$comment_id_last) ;
-    $ListLastComm = json_encode($ListLastComm);
-
-    echo $ListLastComm;
+    $Listjson = json_encode($ListLastComm);
+    echo $Listjson;
 
     exit();
   }
