@@ -69,11 +69,11 @@ if (empty($comments))
     }
 ?>
 <?php if ($anycomments) { ?>
-<button id="bt-voirplus" type="button" class="old-comment" onClick="affiche_old()">
+<button id="bt-voirplus" type="button" class="old-comment" onClick="loadOldComment()">
     Voir plus
 </button>
 
-    <button id="bt-voirplus" type="button" class="hidebutton" onClick="cacherbouton()">
+    <button id="bt-voirplus" type="button" class="hidebutton" onClick="loadOldComment()">
         cacher
     </button>
 <?php } ?>

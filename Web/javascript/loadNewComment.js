@@ -1,11 +1,11 @@
 
 jQuery(document).ready(function(){
-    setInterval('affiche_last()', 3000);
+    setInterval('loadNewComment()', 3000);
 });
 
-function affichercommentaire(comment){
+function buildComment(comment){
 
-    var pistache = $('<fieldset></fieldset>')
+    return $('<fieldset></fieldset>')
         .addClass('comment')
         .attr('data-id',comment.id)
         .append(
@@ -21,52 +21,57 @@ function affichercommentaire(comment){
         $('<p></p>')
             .html(comment.contenu)
     );
-    return pistache;
 }
 
 
-function getvariablecomments(where){
-
-    var newsid = $('.news').attr('data-id');
-    var commentoldid = $('.comment:'+where+'').attr('data-id');
-
-    variable = [newsid,commentoldid];
-    return variable;
+function getComment(where){
+    return {
+        id : $('.comment:'+where+'').attr('data-id'),
+        news_id : $('.news').attr('data-id')
+    };
 }
 
-function cacherbouton(){
+function hideButton(){
     $(".old-comment").css("visibility", "hidden");
 }
 
-function affiche_last()    {
-
-    var variable = getvariablecomments('first');
-    $.post('/getNewComments', {newsid: variable[0], commentid: variable[1]}, function (data) {
-
-        $.each(data, function (index, comment) {
-
-            affichercommentaire(comment).insertBefore('.comment:first');
-        })
-
-    },'json');
+function loadNewComment()    {
+    var comment = getComment('first');
+    loadCommentsUsingCommentId('/getNewComments',comment);
 };
 
+function loadOldComment()    {
+    var comment = getComment('last');
+    loadCommentsUsingCommentId('/getOldComments',comment);
+};
 
-function affiche_old()    {
-    var variable = getvariablecomments('last');
+function loadCommentsUsingCommentId(url,comment) {
 
-    $.post('/getOldComments', {newsid: variable[0], commentid: variable[1]}, function (data)
+    $.post(url, {newsid: comment.news_id, commentid: comment.id}, function (data)
     {
-        $.each(data, function (index, comment)
-        {
-            if(index<5) {
-                affichercommentaire(comment).insertAfter('.comment:last');
-            }
-
-            indexmax=index;
-        })
-        if(indexmax!=5){
-            cacherbouton();
-        }
+        pushComment(data);
     },'json');
-};
+}
+
+function pushComment(data) {
+    var firstComment = getComment('first');
+    var lastComment = getComment('last');
+
+
+    $.each(data, function (index, comment) {
+        if (parseInt(firstComment.id) < parseInt(comment.id) ) {
+            buildComment(comment).insertBefore('.comment:first');
+            firstComment.id = comment.id;
+        }
+        else {
+            buildComment(comment).insertAfter('.comment:last');
+            lastComment.id = comment.id;
+        }
+    });
+
+    if (data.no_more_comment) {
+        hideButton();
+    }
+}
+
+

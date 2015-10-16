@@ -123,45 +123,38 @@ class NewsManagerPDO extends NewsManager
     return $listeNews;
   }
 
-
-  public function prepargetcomment(){
-    $sql= "
-    SELECT b.id, b.news, b.auteur, b.contenu, b.date
-    FROM comments as b
-    WHERE b.news = :newsid";
-
-    return $sql;
-  }
-
   public function getListNewComments($news_id,$comment_id)
   {
-    $sql=self::prepargetcomment();
-    $sql=$sql." and b.id > :commentlast ORDER BY b.id DESC";
 
-    $req = $this->dao->prepare($sql);
-    $req->execute(array(
-        ':newsid' => $news_id,
-        ':commentlast' => $comment_id)
-    );
-
-    $listeNews = $req->fetchAll();
-
-    $req->closeCursor();
-
-    return $listeNews;
+    $this->getListCommentsUsingNewsIdAndCommentId(
+        "SELECT b.id, b.news, b.auteur, b.contenu, b.date
+          FROM comments as b
+          WHERE b.news = :news_id
+          AND b.id > :comment_id
+          ORDER BY b.id ASC",
+        $news_id,
+        $comment_id);
   }
 
 
   public function getListOldComments($news_id,$comment_id)
   {
+    $this->getListCommentsUsingNewsIdAndCommentId(
+        "SELECT b.id, b.news, b.auteur, b.contenu, b.date
+            FROM comments as b
+            WHERE b.news = :news_id
+            AND b.id < :comment_id
+            ORDER BY b.id DESC
+            LIMIT 6",
+        $news_id,
+        $comment_id);
+  }
 
-    $sql=self::prepargetcomment();
-    $sql=$sql." and b.id < :commentold ORDER BY b.id DESC LIMIT 6";
-
+  private function getListCommentsUsingNewsIdAndCommentId($sql, $news_id,$comment_id) {
     $req = $this->dao->prepare($sql);
     $req->execute(array(
-            ':newsid' => $news_id,
-            ':commentold' => $comment_id)
+            ':news_id' => $news_id,
+            ':comment_id' => $comment_id)
     );
 
     $listeNews = $req->fetchAll();
