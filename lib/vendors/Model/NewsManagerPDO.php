@@ -126,7 +126,7 @@ class NewsManagerPDO extends NewsManager
   public function getListNewComments($news_id,$comment_id)
   {
 
-    $this->getListCommentsUsingNewsIdAndCommentId(
+    return $this->getListCommentsUsingNewsIdAndCommentId(
         "SELECT b.id, b.news, b.auteur, b.contenu, b.date
           FROM comments as b
           WHERE b.news = :news_id
@@ -139,7 +139,7 @@ class NewsManagerPDO extends NewsManager
 
   public function getListOldComments($news_id,$comment_id)
   {
-    $this->getListCommentsUsingNewsIdAndCommentId(
+    return $this->getListCommentsUsingNewsIdAndCommentId(
         "SELECT b.id, b.news, b.auteur, b.contenu, b.date
             FROM comments as b
             WHERE b.news = :news_id
@@ -156,9 +156,7 @@ class NewsManagerPDO extends NewsManager
             ':news_id' => $news_id,
             ':comment_id' => $comment_id)
     );
-
     $listeNews = $req->fetchAll();
-
     $req->closeCursor();
 
     return $listeNews;

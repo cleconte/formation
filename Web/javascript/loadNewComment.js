@@ -3,6 +3,11 @@ jQuery(document).ready(function(){
     setInterval('loadNewComment()', 3000);
 });
 
+function change(time) {
+    var r = time.match(/^\s*([0-9]+)\s*-\s*([0-9]+)\s*-\s*([0-9]+)(.*)$/);
+    return r[2]+"-"+r[3]+"-"+r[1]+r[4];
+}
+
 function buildComment(comment){
 
     return $('<fieldset></fieldset>')
@@ -54,6 +59,7 @@ function loadCommentsUsingCommentId(url,comment) {
 }
 
 function pushComment(data) {
+    if (data === null) return false;
     var firstComment = getComment('first');
     var lastComment = getComment('last');
 

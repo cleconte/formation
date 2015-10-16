@@ -317,10 +317,7 @@ class NewsController extends BackController
 
   public function executegetNewComments(HTTPRequest $request)
   {
-    $variables = self::getvariableComments($request);
-
-
-    $ListComm = $variables[2]->getListNewComments($variables[0],$variables[1]) ;
+    $ListComm = $this->managers->getManagerOf('News')->getListNewComments((int)$request->postData('newsid'),(int)$request->postData('commentid')) ;
 
     self::getjsonComment($ListComm);
   }
