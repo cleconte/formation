@@ -68,6 +68,8 @@ class NewsController extends BackController
     $managerComments = $this->managers->getManagerOf('Comments');
     $managerMember = $this->managers->getManagerOf('Member');
 
+    $nombrecommentaireshow = 5;
+
 
     $news = $managerNews->getUnique($request->getData('id'));
  
@@ -78,6 +80,7 @@ class NewsController extends BackController
 
     $ListComments = $managerComments->getListOf($news->id());
 
+    $ListComments = array_slice($ListComments, 0, $nombrecommentaireshow);
 
     $this->page->addVar('id',$managerMember->getID($news->auteur()));
     $this->page->addVar('title', $news->titre());
@@ -296,7 +299,7 @@ class NewsController extends BackController
     $news_id = (int)$request->postData('newsid');
     $comment_id_last = (int)$request->postData('commentlastid');
     //$news_id = 49;
-    //$comment_id_last = (int)30;
+    //$comment_id_last = (int)56;
     $managernews= $this->managers->getManagerOf('News');
     $ListLastComm = $managernews->getListNewComments($news_id,$comment_id_last) ;
     $Listjson = json_encode($ListLastComm);

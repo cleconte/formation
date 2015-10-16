@@ -4,7 +4,7 @@
 
 <p><?= nl2br($news['contenu']) ?></p>
 
-<fieldset>
+<fieldset class="news" data-id="<?=$news['id']?>">
   <legend>
     <strong>TAG</strong>
   </legend>
@@ -30,7 +30,7 @@
 
 
 <h3>Commentaires</h3>
-<div  class="inner"">testcom</div>
+<div  class="inner"">Afficher ici</div>
 
 <?php if ($news['dateAjout'] != $news['dateModif']) { ?>
   <p style="text-align: right;"><small><em>Modifiée le <?= $news['dateModif']->format('d/m/Y à H\hi') ?></em></small></p>
@@ -47,7 +47,7 @@ if (empty($comments))
 foreach ($comments as $comment)
 {
 ?>
-<fieldset>
+<fieldset class="comment" data-id="<?=$comment['id'];?>">
   <legend>
 
 
@@ -70,40 +70,58 @@ foreach ($comments as $comment)
 <input type="submit" id="test" value="Recharger" />
 
 
-
-
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
 
 <script type="text/javascript">
 
-    $('#test').click(function() {
-            var newsid = '<?php echo $news['id']; ?>';
-            alert(newsid);
 
-            var commentlastid = '<?php echo $comments[0]['id']; ?>';
-            alert(commentlastid);
+    var newsid = '<?php echo $news['id']; ?>';
+    //var commentlastid = '<?php echo $comments[0]['id']; ?>';
 
 
-            $.post('/getNewComments', {newsid: newsid, commentlastid: commentlastid}, function (data) {
-                alert(data);
-                console.log(data);
-                    $.each(data, function (index, value) {
+    jQuery(document).ready(function(){
+        setInterval('affiche_last()', 3000);
+    });
 
-                        alert(index + ": " + value.auteur + value.id + value.date + value.contenu);
-                        var text = '<fieldset class="comment"><legend>Poste par: <a href="/member-' + value.auteur + '.html">' + value.auteur + '</a> le ' + value.date + '</legend><p>' + value.contenu + '</p></fieldset>';
-                        alert(text);
+    function affiche_last()
+    {
+        var newsid = $('.news').attr('data-id');
+        var commentlastid = $('.comment:first').attr('data-id');
+        $.post('/getNewComments', {newsid: newsid, commentlastid: commentlastid}, function (data) {
 
-                        $(".inner").append(text);
-                        console.log(text);
-                    });
-                },'json');
-        }
-    );
+            $.each(data, function (index, comment) {
+
+                $('<fieldset></fieldset>')
+                    .addClass('comment')
+                    .attr('data-id',comment.id)
+                    .append(
+                        $('<legend></legend>')
+                                .append(
+                                    'Poste par ',
+                                    $('<a></a>')
+                                        .attr('href','/member-' + comment.auteur + '.html')
+                                        .html( comment.auteur)
+                                        .css('font-weight','bold'),
+                                    ' le ' + comment.date
+                                ),
+                        $('<p></p>')
+                            .html(comment.contenu)
+                        )
+                .appendTo('.inner');
+
+
+            })
+
+        },'json');
+    };
+
 </script>
+
 <!--
 "id":"33","0":"33",
 "news":"49","1":"49",
 "auteur":"test6","2":"test6",
 "contenu":"testafficher json","3":"testafficher json",
 "date":"2015-10-15 17:09:07","4":"2015-10-15 17:09:07"}] -->
+
