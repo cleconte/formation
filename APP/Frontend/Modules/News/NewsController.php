@@ -294,34 +294,48 @@ class NewsController extends BackController
       $this->app->httpResponse()->redirect('.');
   }
 
-  public function executegetNewComments(HTTPRequest $request)
-  {
-
+  public function getvariableComments(HTTPRequest $request){
     $news_id = (int)$request->postData('newsid');
-    $comment_id_last = (int)$request->postData('commentid');
-
+    $comment_id = (int)$request->postData('commentid');
     $managernews= $this->managers->getManagerOf('News');
 
-    $ListLastComm = $managernews->getListNewComments($news_id,$comment_id_last) ;
-    $ListLastComm = json_encode($ListLastComm);
-    echo $ListLastComm;
+    $variables = array();
+    $variables[0] = $news_id;
+    $variables[1] = $comment_id;
+    $variables[2] = $managernews;
+
+    return $variables;
+  }
+
+  public function getjsonComment($ListComm){
+
+    $ListComm = json_encode($ListComm);
+    echo $ListComm;
 
     exit();
   }
+
+  public function executegetNewComments(HTTPRequest $request)
+  {
+    $variables = self::getvariableComments($request);
+
+
+    $ListComm = $variables[2]->getListNewComments($variables[0],$variables[1]) ;
+
+    self::getjsonComment($ListComm);
+  }
+
   public function executegetOldComments(HTTPRequest $request)
   {
 
-    $news_id = (int)$request->postData('newsid');
-    $comment_id_last = (int)$request->postData('commentid');
+    $variables = self::getvariableComments($request);
 
-    $managernews= $this->managers->getManagerOf('News');
 
-    $ListOldComm = $managernews->getListOldComments($news_id,$comment_id_last) ;
-    $ListOldComm = json_encode($ListOldComm);
-    echo $ListOldComm;
+    $ListComm = $variables[2]->getListOldComments($variables[0],$variables[1]) ;
 
-    exit();
+    self::getjsonComment($ListComm);
   }
+
 
 
 

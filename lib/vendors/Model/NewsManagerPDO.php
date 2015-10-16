@@ -123,16 +123,26 @@ class NewsManagerPDO extends NewsManager
     return $listeNews;
   }
 
-  public function getListNewComments($news_id,$comment_id_last)
-  {
-    $req = $this->dao->prepare("
+
+  public function prepargetcomment2(){
+    $sql= "
     SELECT b.id, b.news, b.auteur, b.contenu, b.date
     FROM comments as b
-    WHERE b.news = :newsid and b.date > (SELECT co.date as ter FROM comments as co  where co.id = :commentlast)
-    ORDER BY b.id DESC");
+    WHERE b.news = :newsid";
+
+    return $sql;
+  }
+
+  public function getListNewComments($news_id,$comment_id)
+  {
+    $sql=self::prepargetcomment2();
+    $sql=$sql."
+    and b.id > :commentlast
+    ORDER BY b.id DESC";
+    $req = $this->dao->prepare($sql);
     $req->execute(array(
         ':newsid' => $news_id,
-        ':commentlast' => $comment_id_last)
+        ':commentlast' => $comment_id)
     );
 
     $listeNews = $req->fetchAll();
@@ -142,17 +152,23 @@ class NewsManagerPDO extends NewsManager
     return $listeNews;
   }
 
-  public function getListOldComments($news_id,$comment_id_old)
-  {
-    $req = $this->dao->prepare("
-    SELECT  b.id, b.news, b.auteur, b.contenu, b.date
+  public function prepargetcomment(){
+    $sql= "SELECT b.id, b.news, b.auteur, b.contenu, b.date
     FROM comments as b
-    WHERE b.news = :newsid and b.date < (SELECT co.date as ter FROM comments as co  where co.id = :commentold)
-    ORDER BY b.id DESC
-    LIMIT 6");
+    WHERE b.news = :newsid";
+
+    return $sql;
+  }
+
+  public function getListOldComments($news_id,$comment_id)
+  {
+
+    $sql=self::prepargetcomment2();
+    $sql=$sql." and b.id < :commentold ORDER BY b.id DESC LIMIT 6";
+    $req = $this->dao->prepare($sql);
     $req->execute(array(
             ':newsid' => $news_id,
-            ':commentold' => $comment_id_old)
+            ':commentold' => $comment_id)
     );
 
     $listeNews = $req->fetchAll();
@@ -161,8 +177,7 @@ class NewsManagerPDO extends NewsManager
 
     return $listeNews;
   }
-
-
+  
 
   public function countNewsMember($username)
   {
