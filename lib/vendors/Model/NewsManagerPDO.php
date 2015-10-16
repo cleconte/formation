@@ -145,10 +145,11 @@ class NewsManagerPDO extends NewsManager
   public function getListOldComments($news_id,$comment_id_old)
   {
     $req = $this->dao->prepare("
-    SELECT b.id, b.news, b.auteur, b.contenu, b.date
+    SELECT  b.id, b.news, b.auteur, b.contenu, b.date
     FROM comments as b
     WHERE b.news = :newsid and b.date < (SELECT co.date as ter FROM comments as co  where co.id = :commentold)
-    ORDER BY b.date DESC");
+    ORDER BY b.date DESC
+    LIMIT 5");
     $req->execute(array(
             ':newsid' => $news_id,
             ':commentold' => $comment_id_old)

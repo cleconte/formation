@@ -79,6 +79,7 @@ class NewsController extends BackController
 
 
     $ListComments = $managerComments->getListOf($news->id());
+    $this->page->addVar('anycomments',count($ListComments)>5);
 
     $ListComments = array_slice($ListComments, 0, $nombrecommentaireshow);
     $this->page->addVar('comments', $ListComments);
@@ -86,7 +87,6 @@ class NewsController extends BackController
     $this->page->addVar('id',$managerMember->getID($news->auteur()));
     $this->page->addVar('title', $news->titre());
     $this->page->addVar('news', $news);
-    $this->page->addVar('comments', $ListComments);
 
     //Insertion des tags
 

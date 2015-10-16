@@ -32,7 +32,6 @@
 
 
 <h3>Commentaires</h3>
-<div  class="inner"">Afficher ici</div>
 
 <?php if ($news['dateAjout'] != $news['dateModif']) { ?>
   <p style="text-align: right;"><small><em>Modifiée le <?= $news['dateModif']->format('d/m/Y à H\hi') ?></em></small></p>
@@ -45,31 +44,36 @@ if (empty($comments))
 <p>Aucun commentaire n'a encore été posté. Soyez le premier à en laisser un !</p>
 <?php
 }
- 
-foreach ($comments as $comment)
-{
+
+    foreach ($comments as $comment)
+    {
+
+            ?>
+            <fieldset class="comment" data-id="<?= $comment['id']; ?>">
+                <legend>
+
+
+                    Posté par <strong><a
+                            href="Membre-<?= $comment['auteur'] ?>"><?= htmlspecialchars($comment['auteur']) ?></a></strong>
+                    le <?= $comment['date']->format('d/m/Y à H\hi') ?>
+
+                    <?php if ($user->isAuthenticated()) { ?>
+                        <a href="../admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a>
+                        <a href="../admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
+
+                    <?php } ?>
+                </legend>
+                <p><?= nl2br(htmlspecialchars($comment['contenu'])) ?></p>
+            </fieldset>
+            <?php
+    }
 ?>
-<fieldset class="comment" data-id="<?=$comment['id'];?>">
-  <legend>
-
-
-    Posté par <strong><a href="Membre-<?= $comment['auteur'] ?>"><?= htmlspecialchars($comment['auteur']) ?></a></strong> le <?= $comment['date']->format('d/m/Y à H\hi') ?>
-
-    <?php if ($user->isAuthenticated()) {?>
-      <a href="../admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a>
-      <a href="../admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
-
-    <?php } ?>
-  </legend>
-  <p><?= nl2br(htmlspecialchars($comment['contenu'])) ?></p>
-</fieldset>
-<?php
-}
-?>
-
+<?php if ($anycomments) { ?>
 <button id="bt-voirplus" type="button" class="old-comment" onClick="affiche_old()">
     Voir plus
 </button>
+
+<?php } ?>
 
 </br>
 
@@ -145,16 +149,14 @@ foreach ($comments as $comment)
                 )
                     .insertAfter('.comment:last');
             })
-
         },'json');
     };
 
 </script>
 
 <!--
-"id":"33","0":"33",
-"news":"49","1":"49",
-"auteur":"test6","2":"test6",
-"contenu":"testafficher json","3":"testafficher json",
-"date":"2015-10-15 17:09:07","4":"2015-10-15 17:09:07"}] -->
+:eq( 4 )
+=> 5eme élément
 
+
+-->
