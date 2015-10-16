@@ -67,7 +67,7 @@ foreach ($comments as $comment)
 }
 ?>
 
-<button id="bt-voirplus" type="button" class="old-comment">
+<button id="bt-voirplus" type="button" class="old-comment" onClick="affiche_old()">
     Voir plus
 </button>
 
@@ -112,9 +112,38 @@ foreach ($comments as $comment)
                         $('<p></p>')
                             .html(comment.contenu)
                         )
-                .appendTo('.inner');
+                .insertBefore('.comment:first');
+            })
+
+        },'json');
+    };
 
 
+    function affiche_old()
+    {
+        var newsid = $('.news').attr('data-id');
+        var commentoldid = $('.comment:last').attr('data-id');
+        $.post('/getOldComments', {newsid: newsid, commentidold: commentoldid}, function (data) {
+
+            $.each(data, function (index, comment) {
+
+                $('<fieldset></fieldset>')
+                    .addClass('comment')
+                    .attr('data-id',comment.id)
+                    .append(
+                    $('<legend></legend>')
+                        .append(
+                        'Poste par ',
+                        $('<a></a>')
+                            .attr('href','/member-' + comment.auteur + '.html')
+                            .html( comment.auteur)
+                            .css('font-weight','bold'),
+                        ' le ' + comment.date
+                    ),
+                    $('<p></p>')
+                        .html(comment.contenu)
+                )
+                    .insertAfter('.comment:last');
             })
 
         },'json');

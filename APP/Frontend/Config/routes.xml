@@ -7,6 +7,7 @@
   <route url="/news-delete-([0-9]+)\.html" module="News" action="delete" vars="id" />
 
   <route url="/getNewComments" module="News" action="getNewComments" />
+  <route url="/getOldComments" module="News" action="getOldComments" />
 
   <route url="/commenter-([0-9]+)\.html" module="News" action="insertComment" vars="news" />
 
