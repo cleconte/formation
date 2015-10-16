@@ -124,7 +124,7 @@ class NewsManagerPDO extends NewsManager
   }
 
 
-  public function prepargetcomment2(){
+  public function prepargetcomment(){
     $sql= "
     SELECT b.id, b.news, b.auteur, b.contenu, b.date
     FROM comments as b
@@ -135,10 +135,9 @@ class NewsManagerPDO extends NewsManager
 
   public function getListNewComments($news_id,$comment_id)
   {
-    $sql=self::prepargetcomment2();
-    $sql=$sql."
-    and b.id > :commentlast
-    ORDER BY b.id DESC";
+    $sql=self::prepargetcomment();
+    $sql=$sql." and b.id > :commentlast ORDER BY b.id DESC";
+
     $req = $this->dao->prepare($sql);
     $req->execute(array(
         ':newsid' => $news_id,
@@ -152,19 +151,13 @@ class NewsManagerPDO extends NewsManager
     return $listeNews;
   }
 
-  public function prepargetcomment(){
-    $sql= "SELECT b.id, b.news, b.auteur, b.contenu, b.date
-    FROM comments as b
-    WHERE b.news = :newsid";
-
-    return $sql;
-  }
 
   public function getListOldComments($news_id,$comment_id)
   {
 
-    $sql=self::prepargetcomment2();
+    $sql=self::prepargetcomment();
     $sql=$sql." and b.id < :commentold ORDER BY b.id DESC LIMIT 6";
+
     $req = $this->dao->prepare($sql);
     $req->execute(array(
             ':newsid' => $news_id,
@@ -177,7 +170,7 @@ class NewsManagerPDO extends NewsManager
 
     return $listeNews;
   }
-  
+
 
   public function countNewsMember($username)
   {

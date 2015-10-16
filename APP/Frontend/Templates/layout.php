@@ -8,6 +8,10 @@
     <meta charset="utf-8" />
  
     <link rel="stylesheet" href="/css/Envision.css" type="text/css" />
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="./javascript/loadNewComment.js"></script>
+
   </head>
 
   <body>
