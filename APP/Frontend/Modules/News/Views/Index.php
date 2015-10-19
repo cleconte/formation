@@ -1,14 +1,15 @@
 <?php
+use App\Frontend\AppController;
 foreach ($listeNews as $news)
 {
+  echo'<h2><a href='.AppController::BuildRoute('News','show',array($news['id'])).'>'.$news['titre'].'</a></h2>';
 ?>
-  <h2><a href="news-<?= $news['id'] ?>.html"><?= $news['titre'] ?></a></h2>
   <p><?= nl2br($news['contenu']) ?></p>
   <?php
    if($this->app->user()->getAttribute('user')==$news['auteur'])
     {
-      echo'<td><a href="news-update-', $news['id'], '.html"><img src="/images/update.png" alt="Modifier" /></a>
-        <a href="news-delete-', $news['id'], '.html"><img src="/images/delete.png" alt="Supprimer" /></a></td>';
+      echo'<td><a href='.AppController::BuildRoute('News','update',array($news['id'])).'><img src="/images/update.png" alt="Modifier" /></a>
+        <a href='.AppController::BuildRoute('News','delete',array($news['id'])).'><img src="/images/delete.png" alt="Supprimer" /></a></td>';
     }
 ?>
   <fieldset>
@@ -24,14 +25,12 @@ foreach ($listeNews as $news)
           if($tag[1]== $news['id']&&$i<5)
           {
             $i++;
-              ?>
-                <a href="Tag-<?= $tag[2] ?>"><?= ' ' . $tag[0] ?></a>
-              <?php
+                echo '<a href='.AppController::BuildRoute('Tag','ShowTag',array($tag[2])).'> '.$tag[0] .'</a>';
           }
         }
         if($i==0)
         {
-          echo'il n\'y a pas de tag';
+          echo 'il n\'y a pas de tag';
         }
       ?>
     </p>

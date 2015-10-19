@@ -73,7 +73,7 @@ if (empty($comments))
     Voir plus
 </button>
 
-    <button id="bt-voirplus" type="button" class="hidebutton" onClick="loadOldComment()">
+    <button id="bt-voirplus" type="button" class="hidebutton" onClick="hideButton()">
         cacher
     </button>
 <?php } ?>

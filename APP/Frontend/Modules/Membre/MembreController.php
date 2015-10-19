@@ -3,6 +3,7 @@
 namespace App\Frontend\Modules\Membre;
 
 
+use App\Frontend\AppController;
 use OCFram\BackController;
 use \OCFram\HTTPRequest;
 
@@ -12,9 +13,12 @@ use \Entity\Member;
 
 class MembreController extends  BackController
 {
+    use AppController;
 
     public function executeIndex(HTTPRequest $request)
     {
+
+        $this->run();
 
 
         // On récupère le manager des member.
@@ -71,6 +75,8 @@ class MembreController extends  BackController
     public function executeNews(HTTPRequest $request)
     {
 
+        $this->run();
+
             $id=$request->getData('id');
             $manager = $this->managers->getManagerOf('Member');
             $auteur= $manager->getUsername($id);
@@ -107,6 +113,8 @@ class MembreController extends  BackController
 
     public function executeComments(HTTPRequest $request)
     {
+
+        $this->run();
 
             $id=$request->getData('id');
             $manager = $this->managers->getManagerOf('Member');

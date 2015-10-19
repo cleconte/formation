@@ -20,30 +20,27 @@
         <h1><a href="/">Mon super site</a></h1>
         <p>Comment ça, il n'y a presque rien ?</p>
       </header>
- 
+
       <nav>
         <ul>
-          <li><a href="/">Accueil</a></li>
-          <?php if ($user->isAuthenticated()) { ?>
-          <li><a href="/admin/">Admin</a></li>
-          <li><a href="/admin/news-insert.html">Ajouter une news</a></li>
-		  <li><a href="/admin/deconnexion">Deconnexion</a></li>
-          <?php }
-          else if(!$user->isMember()){?>
+          <li><a href="/News/index">Accueil</a></li>
 
-            <li><a href="/Register">inscription</a></li>
-            <li><a href="/Connexion">Connexion</a></li>
-          <?php }
-          else {?>
+          <?php
 
-            <li><a href="/Profil">Profil</a></li>
-            <li><a href="/news-insert.html">Ajouter une news</a></li>
-            <li><a href="/Deconnexion">Deconnexion</a></li>
-          <?php }?>
+          if (isset($menu_nav)){
+
+            foreach($menu_nav as $value){
+              foreach($value as $value2) {
+                echo '<li><a href=' . $value2['link'] . '>' . $value2['text'] . '</a></li>';
+              }
+            }
+
+          }?>
+
 
         </ul>
       </nav>
- 
+
       <div id="content-wrap">
         <section id="main">
           <?php if ($user->hasFlash()) echo '<p style="text-align: center;">', $user->getFlash(), '</p>'; ?>

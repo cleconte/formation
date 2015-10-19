@@ -2,6 +2,7 @@
 namespace App\Backend\Modules\News;
 
 
+use App\Backend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \OCFram\FormHandler;
@@ -14,8 +15,12 @@ use \FormBuilder\NewsFormBuilder;
  
 class NewsController extends BackController
 {
+
+  use AppController;
+
   public function executeDelete(HTTPRequest $request)
   {
+
       $newsId = $request->getData('id');
       if($this->managers->getManagerOf('News')->get($request->getData('id'))==false){
           $this->app->httpResponse()->redirect404();
@@ -42,6 +47,8 @@ class NewsController extends BackController
  
   public function executeIndex(HTTPRequest $request)
   {
+    $this->run();
+
     $this->page->addVar('title', 'Gestion des news');
  
     $manager = $this->managers->getManagerOf('News');
@@ -66,6 +73,9 @@ class NewsController extends BackController
  
   public function executeUpdateComment(HTTPRequest $request)
   {
+
+    $this->run();
+
     $this->page->addVar('title', 'Modification d\'un commentaire');
  
     if ($request->method() == 'POST')
@@ -104,6 +114,9 @@ class NewsController extends BackController
  
   public function processForm(HTTPRequest $request)
   {
+
+    $this->run();
+
     if ($request->method() == 'POST')
     {
       $news = new News([

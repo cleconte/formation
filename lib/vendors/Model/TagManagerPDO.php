@@ -109,9 +109,12 @@ class TagManagerPDO extends TagManager
     }
 
     public function getname($id){ //erreur probable
-    return $this->dao->query("SELECT NTC_name FROM T_NEW_tagc WHERE NTC_id = '$id'")->fetchColumn();
+        return $this->dao->query("SELECT NTC_name FROM T_NEW_tagc WHERE NTC_id = '$id'")->fetchColumn();
     }
 
+    public function getUnique($id){
+        return $this->dao->query("SELECT NTC_name FROM T_NEW_tagc INNER JOIN t_new_tagd on NTD_fk_NTC=NTC_id WHERE NTD_fk_new = '$id'")->fetchAll();
+    }
 
 
 }

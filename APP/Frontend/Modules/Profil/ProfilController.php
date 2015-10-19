@@ -3,6 +3,7 @@
 namespace App\Frontend\Modules\Profil;
 
 
+use App\Frontend\AppController;
 use OCFram\BackController;
 use \OCFram\HTTPRequest;
 
@@ -12,16 +13,18 @@ use \Entity\Member;
 
 class ProfilController extends  BackController
 {
+    use AppController;
 
     public function executeIndex(HTTPRequest $request)
     {
 
+        $this->run();
 
         // On récupère le manager des member.
         /** @var NewsManagerPDO $manager */
         $manager = $this->managers->getManagerOf('Member');
 
-        if(isset($_SESSION['mail'])){
+        if(isset($_SESSION['id'])){
 
             $id=$_SESSION['id'];
             $manager = $this->managers->getManagerOf('Member');
@@ -49,7 +52,10 @@ class ProfilController extends  BackController
 
     public function executeNews(HTTPRequest $request)
     {
-        if(!isset($_SESSION['mail']))
+
+        $this->run();
+
+        if(!isset($_SESSION['id']))
         {
             $this->app->httpResponse()->redirect404();
         }
@@ -70,7 +76,10 @@ class ProfilController extends  BackController
 
     public function executeComments(HTTPRequest $request)
     {
-        if(!isset($_SESSION['mail']))
+
+        $this->run();
+
+        if(!isset($_SESSION['id']))
         {
             $this->app->httpResponse()->redirect404();
         }

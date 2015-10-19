@@ -3,6 +3,8 @@ namespace App\Frontend\Modules\News;
 
 use \Model\NewsManagerPDO;
 
+use \App\Frontend\AppController;
+
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \OCFram\FormHandler;
@@ -19,8 +21,13 @@ use \FormBuilder\TagFormBuilder;
 
 class NewsController extends BackController
 {
+
+  use AppController;
+
   public function executeIndex(HTTPRequest $request)
   {
+    // On génère le titre
+    $this->run();
 
     //var_dump($this->app->user());
     $nombreNews = $this->app->config()->get('nombre_news');
@@ -64,6 +71,9 @@ class NewsController extends BackController
  
   public function executeShow(HTTPRequest $request)
   {
+
+    $this->run();
+
     $managerNews = $this->managers->getManagerOf('News');
     $managerComments = $this->managers->getManagerOf('Comments');
     $managerMember = $this->managers->getManagerOf('Member');
@@ -97,6 +107,9 @@ class NewsController extends BackController
 
   public function executeInsertComment(HTTPRequest $request)
   {
+  //ajout menu navigateur
+    $this->run();
+
     // si la news dans laquelle on veut insérer n'existe pas, redirection
     $news = $this->managers->getManagerOf('News')->getUnique($request->getData('news'));
     if($news == null){
@@ -157,6 +170,7 @@ class NewsController extends BackController
   public function executeInsert(HTTPRequest $request)
   {
 
+
       // vérifier que la personne est bien connecté
 
     $this->processForm($request);
@@ -173,6 +187,9 @@ class NewsController extends BackController
 
   public function processForm(HTTPRequest $request)
   {
+
+    $this->run();
+
 
     //manager news
     $managersNews =$this->managers->getManagerOf('News');
@@ -214,7 +231,14 @@ class NewsController extends BackController
       if ($request->getExists('id') )
       {
         $news = $managersNews->getUnique($request->getData('id'));
+        $text='';
+        foreach($managersTag->getUnique($request->getData('id')) as $value) {
+          $text = $text.' '.$value['NTC_name'];
+        }
 
+        $tag = new Tag([
+            'name' => $text]);
+        var_dump($tag);
         if( $news == null ){
 
           $this->app->httpResponse()->redirect404();
@@ -223,9 +247,8 @@ class NewsController extends BackController
       else
       {
         $news = new News;
+        $tag = new Tag;
       }
-
-      $tag = new Tag;
     }
 
     //construction formulaire news
@@ -241,10 +264,7 @@ class NewsController extends BackController
     $formBuilderTag = new TagFormBuilder($tag); // même formbuilder ?
     $formBuilderTag->build($managersTag);
 
-
     $formTag = $formBuilderTag->form();
-
-
 
     // manager tagd
     $managersTagd=$this->managers->getManagerOf('Tagd');
@@ -294,18 +314,6 @@ class NewsController extends BackController
       $this->app->httpResponse()->redirect('.');
   }
 
-  public function getvariableComments(HTTPRequest $request){
-    $news_id = (int)$request->postData('newsid');
-    $comment_id = (int)$request->postData('commentid');
-    $managernews= $this->managers->getManagerOf('News');
-
-    $variables = array();
-    $variables[0] = $news_id;
-    $variables[1] = $comment_id;
-    $variables[2] = $managernews;
-
-    return $variables;
-  }
 
   public function getjsonComment($ListComm){
 
@@ -324,13 +332,17 @@ class NewsController extends BackController
 
   public function executegetOldComments(HTTPRequest $request)
   {
+    $news_id = (int)$request->postData('newsid');
+    $comment_id = (int)$request->postData('commentid');
+    $managernews= $this->managers->getManagerOf('News');
 
-    $variables = self::getvariableComments($request);
 
+    $ListComm = $managernews->getListOldComments($news_id,$comment_id) ;
 
-    $ListComm = $variables[2]->getListOldComments($variables[0],$variables[1]) ;
+    $ListComm = json_encode($ListComm);
+    echo $ListComm;
 
-    self::getjsonComment($ListComm);
+    exit();
   }
 
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Frontend\Modules\Tag;
 
+use App\Frontend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\Tag;
@@ -9,8 +10,13 @@ use \FormBuilder\TagFormBuilder;
 
 class TagController extends BackController
 {
+    use AppController;
+
     public function executeIndex(HTTPRequest $request)
     {
+
+        $this->run();
+
         $managers=$this->managers->getManagerOf('Tag');
 
         if ($request->method() == 'POST' && $request->postData('name')!='')
@@ -68,7 +74,9 @@ class TagController extends BackController
         else return false;
     }
 
-    public function executeShowNews(HTTPRequest $request){
+    public function executeShowTag(HTTPRequest $request){
+
+        $this->run();
 
         $managertag= $this->managers->getManagerOf('Tag');
         // Si le numéro de tag exist :

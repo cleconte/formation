@@ -10,6 +10,7 @@ abstract class BackController extends ApplicationComponent
   protected $managers = null;
   protected $detect ='';
 
+
   public function __construct(Application $app, $module, $action)
   {
     parent::__construct($app);
@@ -20,6 +21,7 @@ abstract class BackController extends ApplicationComponent
     $this->setModule($module);
     $this->setAction($action);
     $this->setView($action);
+
   }
  
   public function execute()

@@ -7,10 +7,16 @@ use \Entity\Member;
 use \FormBuilder\AutorFormBuilder;
 use \OCFram\FormHandler;
 
+use \App\Frontend\AppController;
 class ConnexionController extends BackController
 {
+
+    use AppController;
+
     public function executeIndex(HTTPRequest $request)
     {
+
+        $this->run();
 
         if ($request->method() == 'POST')
         {
@@ -44,7 +50,7 @@ class ConnexionController extends BackController
 
             $this->app->user()->setFlash('Tu es connecté');
 
-            $this->app->httpResponse()->redirect('.');
+            $this->app->httpResponse()->redirect(self::BuildRoute('News','index',[]));
         }
         $this->page->addVar('title', 'Connexion');
         $this->page->addVar('Member', $member);

@@ -1,6 +1,7 @@
 <?php
 namespace App\Frontend\Modules\Register;
 
+use App\Frontend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\Member;
@@ -10,8 +11,12 @@ use \OCFram\FormHandler;
 
 class RegisterController extends BackController
 {
+    use AppController;
+
     public function executeIndex(HTTPRequest $request)
     {
+
+        $this->run();
 
         if ($request->method() == 'POST')
         {

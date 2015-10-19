@@ -42,12 +42,12 @@ function hideButton(){
 
 function loadNewComment()    {
     var comment = getComment('first');
-    loadCommentsUsingCommentId('/getNewComments',comment);
+    loadCommentsUsingCommentId('/News/getNewComments',comment);
 };
 
 function loadOldComment()    {
     var comment = getComment('last');
-    loadCommentsUsingCommentId('/getOldComments',comment);
+    loadCommentsUsingCommentId('/News/getOldComments',comment);
 };
 
 function loadCommentsUsingCommentId(url,comment) {
@@ -65,19 +65,27 @@ function pushComment(data) {
 
 
     $.each(data, function (index, comment) {
+
         if (parseInt(firstComment.id) < parseInt(comment.id) ) {
             buildComment(comment).insertBefore('.comment:first');
             firstComment.id = comment.id;
         }
         else {
-            buildComment(comment).insertAfter('.comment:last');
-            lastComment.id = comment.id;
-        }
-    });
+            if(index<5){
+                buildComment(comment).insertAfter('.comment:last');
+                lastComment.id = comment.id;
 
-    if (data.no_more_comment) {
+            }
+            indexmax=index;
+        }
+
+    }
+
+    );
+    if(indexmax!=5){
         hideButton();
     }
+
 }
 
 

@@ -9,13 +9,19 @@ namespace App\Frontend\Modules\Device;
 
 
 
+use App\Frontend\AppController;
 use OCFram\BackController;
 use \OCFram\HTTPRequest;
 
+
 class DeviceController extends  BackController
 {
+    use AppController;
 
     public function executeIndex(HTTPRequest $request){
+
+
+        $this->run();
 
         $detect = new \Mobile_Detect;
         $deviceType = $detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer';

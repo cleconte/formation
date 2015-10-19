@@ -2,7 +2,7 @@
 <form action="" method="post">
     <p>
         <?= $formNews ?>
-
+        <?= $formTag ?>
         <input type="submit" value="Modifier" />
     </p>
 </form>

@@ -1,6 +1,7 @@
 <?php
 namespace App\Backend\Modules\Connexion;
  
+use App\Backend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \Entity\Member;
@@ -9,8 +10,11 @@ use \OCFram\FormHandler;
  
 class ConnexionController extends BackController
 {
+  use AppController;
+
   public function executeIndex(HTTPRequest $request)
   {
+    $this->run();
 
     if ($request->method() == 'POST')
     {
