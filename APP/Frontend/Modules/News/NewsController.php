@@ -14,7 +14,6 @@ use \Entity\Comment;
 use \Entity\Tag;
 use \Entity\Tagd;
 
-
 use \FormBuilder\CommentFormBuilder;
 use \FormBuilder\NewsMemberFormBuilder;
 use \FormBuilder\TagFormBuilder;
@@ -29,7 +28,6 @@ class NewsController extends BackController
     // On génère le titre
     $this->run();
 
-    //var_dump($this->app->user());
     $nombreNews = $this->app->config()->get('nombre_news');
     $nombreCaracteres = $this->app->config()->get('nombre_caracteres');
 
@@ -84,8 +82,13 @@ class NewsController extends BackController
     $news = $managerNews->getUnique($request->getData('id'));
  
     if (empty($news) ||$news ==null){
-      $this->app->httpResponse()->redirect404();
+
+      $this->jump('News','Test');
+      //$this->jump
+      //$this->app->httpResponse()->redirect404();
     }
+    else{
+
 
 
     $ListComments = $managerComments->getListOf($news->id());
@@ -103,6 +106,7 @@ class NewsController extends BackController
     $managerTag = $this->managers->getManagerOf('Tag');
     $ListTag = $managerTag->getListOf($news->id());
     $this->page->addVar('tags', $ListTag);
+    }
   }
 
   public function executeInsertComment(HTTPRequest $request)
@@ -125,7 +129,7 @@ class NewsController extends BackController
         $comment = new Comment([
             'news' => $request->getData('news'),
             'auteur'=>$this->app->user()->getAttribute('user'),
-            'mail'=>$this->app->user()->getAttribute('mail'),
+            'mail'=>$this->managers->getManagerOf('Member')->getMail($this->app->user()->getAttribute('user')),
             'contenu' => $request->postData('contenu')
         ]);
       }
@@ -143,11 +147,6 @@ class NewsController extends BackController
     {
       $comment = new Comment;
     }
-    /*
-      var_dump($_SESSION['mail']);
-      var_dump($this->app->user()->getMail());
-        var_dump($comment->mail());
-      var_dump($comment);*/
     $formBuilder = new CommentFormBuilder($comment);
     $formBuilder->build();
  
@@ -158,8 +157,10 @@ class NewsController extends BackController
     if ($formHandler->process())
     {
       $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
- 
-      $this->app->httpResponse()->redirect('news-'.$request->getData('news').'.html');
+
+
+      $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','show',[$request->getData('news')]));
+      //$this->app->httpResponse()->redirect('news-'.$request->getData('news').'.html');
     }
  
     $this->page->addVar('comment', $comment);
@@ -190,7 +191,6 @@ class NewsController extends BackController
 
     $this->run();
 
-
     //manager news
     $managersNews =$this->managers->getManagerOf('News');
 
@@ -211,8 +211,6 @@ class NewsController extends BackController
         $tag = new Tag([
             'name' => $request->postData('name')]);
         $table=NewsController::separateTag($tag->name()); //vraiment ici ?
-        //var_dump($table);
-        //var_dump(count($table));
 
         //on sauvegarde tout les tags rentré si ils n'existes pas !
       }else{
@@ -238,7 +236,6 @@ class NewsController extends BackController
 
         $tag = new Tag([
             'name' => $text]);
-        var_dump($tag);
         if( $news == null ){
 
           $this->app->httpResponse()->redirect404();
@@ -290,7 +287,8 @@ class NewsController extends BackController
         $tagd->setIdtag($idtag);
         $managersTagd->add($tagd);
       }
-      $this->app->httpResponse()->redirect('.');
+
+      $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','index',[]));
     }
     $this->page->addVar('formNews', $formNews->createView());
     $this->page->addVar('formTag', $formTag->createView());
@@ -311,7 +309,7 @@ class NewsController extends BackController
       $this->managers->getManagerOf('Tagd')->deleteFromNews($newsId);
       $this->app->user()->setFlash('La news a bien été supprimée !');
 
-      $this->app->httpResponse()->redirect('.');
+      $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','index',[]));
   }
 
 
@@ -339,14 +337,14 @@ class NewsController extends BackController
 
     $ListComm = $managernews->getListOldComments($news_id,$comment_id) ;
 
-    $ListComm = json_encode($ListComm);
-    echo $ListComm;
-
-    exit();
+    self::getjsonComment($ListComm);
   }
 
-
-
+  public function executeTest(HTTPRequest $request){
+    $this->page->addVar('test',$request->getData('id'));
+    echo 'test ';
+    echo $request->getData('id');
+  }
 
   public static function separateTag($name) // utiliser la function explode
   {

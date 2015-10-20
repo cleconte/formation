@@ -1,4 +1,4 @@
-<p>Par <a href="../Membre-<?= $id ?>" ><em><?= $news['auteur'] ?></em></a>, le <?= $news['dateAjout']->format('d/m/Y à H\hi') ?></p>
+<p>Par <a href=<?php echo''.$this->app->router()->BuildRoute('Membre','index',array($id)).'' ;?>><em><?= $news['auteur'] ?></em></a>, le <?= $news['dateAjout']->format('d/m/Y à H\hi') ?></p>
 
 <h2><?= $news['titre'] ?></h2>
 
@@ -16,7 +16,7 @@
           {
               $i++;
               ?>
-                <a href="Tag-<?= $tag[2] ?>"><?= ' ' . $tag[0] ?></a>
+              <?php echo '<a href='.$this->app->router()->BuildRoute('Tag','ShowTag',[$tag[2]]).'>'. $tag[0] .'</a>';?>
               <?php
           }
       }
@@ -28,7 +28,8 @@
 </fieldset>
 </br>
 
-<p><a href="commenter-<?= $news['id'] ?>.html">Ajouter un commentaire</a></p>
+<?php echo '<p><a href='.$this->app->router()->BuildRoute('News','insertComment',[$news['id']]).'>Ajouter un commentaire</a></p>';?>
+
 
 
 <h3>Commentaires</h3>
@@ -53,8 +54,11 @@ if (empty($comments))
                 <legend>
 
 
-                    Posté par <strong><a
-                            href="Membre-<?= $comment['auteur'] ?>"><?= htmlspecialchars($comment['auteur']) ?></a></strong>
+                    Posté par
+                    <strong>
+                            <?php echo '<a href='.$this->app->router()->BuildRoute('Membre','index',[$comment['auteur']]) ?>
+                            <a href="Membre-<?= $comment['auteur'] ?>"><?= htmlspecialchars($comment['auteur']) ?></a>
+                    </strong>
                     le <?= $comment['date']->format('d/m/Y à H\hi') ?>
 
                     <?php if ($user->isAuthenticated()) { ?>

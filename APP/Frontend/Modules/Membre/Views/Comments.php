@@ -1,9 +1,11 @@
 
 <ul id="profilmenu">
-    <li><a href="../Membre-<?= $id ?>">Retour à son Profil</a></li>
+
+
+    <li> <?php echo '<a href='.$this->app->router()->BuildRoute('Membre','index',[$id ]).'>'?>Retour à son Profil</a></li>
 
     <?php if($auteur!=false)
-    {?><li><a href="../Membre-<?= $id ?>/News">Ses News</a></li>
+    {?><li> <?php echo '<a href='.$this->app->router()->BuildRoute('Membre','News',[$id ]).'>'?>Ses News</a></li>
     <?php }?>
 </ul>
 
@@ -17,12 +19,12 @@ if($number>0) {
                 Posté par <strong><?= htmlspecialchars($comment['auteur']) ?></strong>
                 le <?= $comment['date']->format('d/m/Y à H\hi') ?>
 
-                <?php if ($user->isAuthenticated()) { ?> -
-                    <a href="../admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a> |
+                <?php if ($user->isAuthenticated()) { ?>
+                    <a href="../admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a>
                     <a href="../admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
                 <?php } ?>
 
-                sur cette <a href="../news-<?= $comment['news'] ?>.html">New</a>
+                sur cette <?php echo '<a href='.$this->app->router()->BuildRoute('News','show',[$comment['news'] ]).'>'?>New</a>
             </legend>
             <p><?= nl2br(htmlspecialchars($comment['contenu'])) ?></p>
         </fieldset>
@@ -33,6 +35,6 @@ else
 {
 ?>
     <h2>Il n'a pas écris de commentaire</h2>
-    <p>Allez donc voir quelques news<td><a href="../"><img src="/images/update.png" alt="Accueil" /></a></p>
+    <p>Allez donc voir quelques news<?php echo '<a href='.$this->app->router()->BuildRoute('News','index',[]).'>'?><img src="/images/update.png" alt="Accueil" /></a></p>
 <?php
 }?>

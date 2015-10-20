@@ -11,7 +11,7 @@ class DeconnexionController extends BackController
     {
 
         $this->app->user()->setDeconnexion();
-        $this->app->httpResponse()->redirect(self::BuildRoute('Deconnexion','index',[]));
+        $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','index',[]));
 
     }
 }

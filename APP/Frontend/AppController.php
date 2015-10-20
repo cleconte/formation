@@ -1,13 +1,16 @@
 <?php
 namespace App\Frontend;
 
+use \OCFram\Application;
+use \OCFram\BackController;
+
 trait AppController
 {
 
     protected  function run(){
         $this->setMenu();
-    }
 
+    }
 
     public function setMenu(){
         //if admin
@@ -17,37 +20,49 @@ trait AppController
 
         if($this->app->name()=='Frontend'){
             array_push($menu_nav,array(
-                array('text'=>'Tu es dans le FrontEnd','link'=>'/')
+                array('text'=>'Tu es dans le FrontEnd','link'=>$this->app->router()->BuildRoute('News','index',[]))
             ));
         }
 
         if($user->isMember()){
             array_push($menu_nav,array(
-                    array('text'=>'Profil','link'=>self::BuildRoute('Profil','index',[])),
-                    array('text'=>'Ajouter une News','link'=>self::BuildRoute('News','insert',[])),
-                    array('text'=>'Deconnexion','link'=>self::BuildRoute('Deconnexion','index',[])))
+                    array('text'=>'Profil','link'=>$this->app->router()->BuildRoute('Profil','index',[])),
+                    array('text'=>'Ajouter une News','link'=>$this->app->router()->BuildRoute('News','insert',[])),
+                    array('text'=>'Deconnexion','link'=>$this->app->router()->BuildRoute('Deconnexion','index',[])))
                     );
         }
         else {
 
             array_push($menu_nav,array(
-                array('text'=>'inscription','link'=>self::BuildRoute('Register','index',[])),
-                array('text'=>'Connexion','link'=>self::BuildRoute('Connexion','index',[])))
-                    );
+                array('text'=>'inscription','link'=>$this->app->router()->BuildRoute('Register','index',[])),
+                array('text'=>'Connexion','link'=>$this->app->router()->BuildRoute('Connexion','index',[]))
+                    ));
         }
         $this->page->addVar('menu_nav',$menu_nav);
 
     }
 
-    public static function BuildRoute($module, $action, array $varsNames){
-        $var='';
-        if($varsNames!=null){
-            foreach($varsNames as $vars){
-                $var=$var.'-'.$vars;
-            }
-        }
-        return "/$module/$action$var";
-    }
+    /**
+    * @param string $targetmodule
+    * @param string $targetaction
+    */
+    /*
+    protected function jump($targetmodule, $targetaction){
+        //vérifier ce que l'on reçoit ?
+        $controllerClass = 'App\\Frontend\\Modules\\'.$targetmodule.'\\'.$targetmodule.'Controller';
+        $ControllerClass = new $controllerClass($this->app(),$targetmodule,$targetaction);// pourquoi backcontroller n'est pas intencier ?
+
+
+        $this->setView($targetaction); // pourquoi il ne s'appelle pas tout seul ?
+        $ControllerClass->execute();
+
+
+
+        //$this->app->httpResponse->setPage($ControllerClass->page());
+        //$this->app->httpResponse->send();
+
+    }*/
+
 
 }
 ?>

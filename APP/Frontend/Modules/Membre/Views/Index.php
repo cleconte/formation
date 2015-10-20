@@ -23,7 +23,7 @@
 
 <ul id="profilmenu">
     <?php if($auteur!=false)
-    {?><li><a href="../Membre-<?= $id ?>/News">Ses News</a></li>
+    {?><li><?php echo '<a href='.$this->app->router()->BuildRoute('Membre','News',[$id ]).'>'?>Ses News</a></li>
     <?php }?>
-    <li><a href="../Membre-<?= $id ?>/Comments">Ses Commentaires</a></li>
+    <li><?php echo '<a href='.$this->app->router()->BuildRoute('Membre','Comments',[$id ]).'>'?>Ses Commentaires</a></li>
 </ul>

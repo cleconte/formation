@@ -10,20 +10,20 @@
     <link rel="stylesheet" href="/css/Envision.css" type="text/css" />
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script type="text/javascript" src="./javascript/loadNewComment.js"></script>
+    <script type="text/javascript" src="..\javascript\loadNewComment.js"></script>
 
   </head>
 
   <body>
     <div id="wrap">
       <header>
-        <h1><a href="/">Mon super site</a></h1>
+        <?php echo '<h1><a href='.$this->app->router()->BuildRoute('Profil','index',[]).'>Mon super site</a></h1>' ?>
         <p>Comment ça, il n'y a presque rien ?</p>
       </header>
 
       <nav>
         <ul>
-          <li><a href="/News/index">Accueil</a></li>
+          <?php echo '<li><a href='.$this->app->router()->BuildRoute('News','index',[]).'>Accueil</a></li>' ?>
 
           <?php
 

@@ -18,7 +18,7 @@ function buildComment(comment){
             .append(
             'Poste par ',
             $('<a></a>')
-                .attr('href','/member-' + comment.auteur + '.html')
+                .attr('href','/Membre/index-'+ comment.auteur )
                 .html( comment.auteur)
                 .css('font-weight','bold'),
             ' le ' + comment.date
@@ -60,6 +60,7 @@ function loadCommentsUsingCommentId(url,comment) {
 
 function pushComment(data) {
     if (data === null) return false;
+
     var firstComment = getComment('first');
     var lastComment = getComment('last');
 
@@ -79,13 +80,11 @@ function pushComment(data) {
             indexmax=index;
         }
 
-    }
+    });
 
-    );
-    if(indexmax!=5){
+    if(typeof indexmax != 'undefined' && indexmax !=5){
         hideButton();
     }
-
 }
 
 

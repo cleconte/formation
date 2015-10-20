@@ -50,7 +50,7 @@ class ConnexionController extends BackController
 
             $this->app->user()->setFlash('Tu es connecté');
 
-            $this->app->httpResponse()->redirect(self::BuildRoute('News','index',[]));
+            $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','index',[]));
         }
         $this->page->addVar('title', 'Connexion');
         $this->page->addVar('Member', $member);

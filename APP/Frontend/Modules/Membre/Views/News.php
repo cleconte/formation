@@ -1,6 +1,7 @@
 <ul id="profilmenu">
-    <li><a href="../Membre-<?= $id ?>">Retour à son Profil</a></li>
-    <li><a href="../Membre-<?= $id ?>/Comments">Ses Commentaires</a></li>
+
+    <li><?php echo '<a href='.$this->app->router()->BuildRoute('Membre','index',[$id ]).'>'?>Retour à son Profils</a></li>
+    <li><?php echo '<a href='.$this->app->router()->BuildRoute('Membre','Comments',[$id ]).'>'?>Ses Commentaires</a></li>
 </ul>
 
 <?php

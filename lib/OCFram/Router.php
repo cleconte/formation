@@ -12,7 +12,12 @@ class Router
   {
     if (!in_array($route, $this->routes))
     {
-      $this->routes[] = $route;
+      $module=$route->module();
+      $action=$route->action();
+      $key=$module.','.$action;
+      $this->routes[$key] = $route;
+      //[$route->module(),$route->action()] =>
+      //array_push($this->routes[],[$route->module(),$route->action()=>$route]);
     }
   }
  
@@ -43,11 +48,42 @@ class Router
           // On assigne ce tableau de variables � la route
           $route->setVars($listVars);
         }
- 
         return $route;
       }
     }
  
     throw new \RuntimeException('Aucune route ne correspond à l\'URL', self::NO_ROUTE);
   }
+
+  /**
+   * @param $module
+   * @param $action
+   * @param array $vars
+   * @return string url de destination correspondant à $action du $mordule avec les $vars.
+   */
+  public function getBuiltRoute($module, $action, array $vars){
+
+
+    $route = $this->routes[$module.','.$action];
+
+    if($route->hasVars()){
+    //ajouter les variables
+      $routebuilt=$route->url();
+      foreach($vars as $var){//key de route
+        $routebuilt = preg_replace('/\(.*\)/', $var, $routebuilt,1);
+      }//pour chaque parenthèse, on insère la variable associé (l'ordre est donc important)
+      return $routebuilt;
+
+    }else{
+      return $route->url();
+    }
+
+    throw new \RuntimeException('Aucune route ne correspond à l\'URL', self::NO_ROUTE);
+  }
+
+  // on appelle cette fonction ici parce qu'on a eu la flemme de réecrire getbuiltRoute alors que l'on sait que la nomenclature est pourri
+  public function BuildRoute($module, $action, array $vars){
+  return self::getBuiltRoute($module, $action,$vars);
+  }
+
 }
