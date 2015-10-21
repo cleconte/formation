@@ -87,4 +87,13 @@ function pushComment(data) {
     }
 }
 
+function hideComment(){
+    var i = 0;
+    while (i<4 && $('.comment:'+'last'+'').attr('data-id')!=$('.comment:'+'first'+'').attr('data-id')){
+
+        $('.comment:'+'last'+'').remove();
+        i++;
+    }
+}
+
 

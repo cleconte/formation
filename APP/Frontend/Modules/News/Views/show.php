@@ -37,6 +37,10 @@
 </fieldset>
 </br>
 
+<?php if ($news['dateAjout'] != $news['dateModif']) { ?>
+    <p style="text-align: right;"><small><em>Modifiée le <?= $news['dateModif']->format('d/m/Y à H\hi') ?></em></small></p>
+<?php } ?>
+
 <?php
 
 $vars= array();
@@ -47,9 +51,6 @@ echo '<p><a href='.$Router->BuildRoute('News','insertComment',$vars).'>Ajouter u
 
 <h3>Commentaires</h3>
 
-<?php if ($news['dateAjout'] != $news['dateModif']) { ?>
-  <p style="text-align: right;"><small><em>Modifiée le <?= $news['dateModif']->format('d/m/Y à H\hi') ?></em></small></p>
-<?php } ?>
 
 <?php
 if (empty($comments))
@@ -95,9 +96,15 @@ if (empty($comments))
     Voir plus
 </button>
 
+    <button id="bt-voirmoins" type="button" class="old-comment" onClick="hideComment()">
+        Voir moins
+    </button>
+
+
     <button id="bt-voirplus" type="button" class="hidebutton" onClick="hideButton()">
         cacher
     </button>
+
 <?php } ?>
 
 </br>
