@@ -39,7 +39,7 @@ class ConnexionController extends BackController
     if ($formHandler->process())
     {
       $this->app->user()->setAuthenticated(true);
-      $this->app->httpResponse()->redirect('.');
+      $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','index',[]));
     }
     $this->page->addVar('title', 'Connexion');
     $this->page->addVar('Member', $member);

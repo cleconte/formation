@@ -1,8 +1,8 @@
 <ul id="profilmenu">
 
-    <?php echo ' <li><a href='.$this->app->router()->BuildRoute('Profil','index',[]).'>Retour Profil</a></li>'; ?>
+    <?php echo ' <li><a href='.$Router->BuildRoute('Profil','index',[]).'>Retour Profil</a></li>'; ?>
 
-    <?php echo ' <li><a href='.$this->app->router()->BuildRoute('Profil','News',[]).'>Mes News</a></li>'; ?>
+    <?php echo ' <li><a href='.$Router->BuildRoute('Profil','News',[]).'>Mes News</a></li>'; ?>
 
 </ul>
 

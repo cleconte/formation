@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <routes>
-  <route url="/News/index" module="News" action="index" />
+  <route url="/" module="News" action="index" />
   <route url="/News/show-([0-9]+)" module="News" action="show" vars="id"/>
   <route url="/News/insert" module="News" action="insert" />
   <route url="/News/update-([0-9]+)" module="News" action="update" vars="id" />

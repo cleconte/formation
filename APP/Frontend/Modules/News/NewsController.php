@@ -21,7 +21,7 @@ use \FormBuilder\TagFormBuilder;
 
 class NewsController extends BackController
 {
-
+  //const ROUTER = $this->app->router();
   use AppController;
 
   public function executeIndex(HTTPRequest $request)
@@ -65,6 +65,7 @@ class NewsController extends BackController
     $this->page->addVar('listeNews', $listeNews);
     // et aussi la liste des tags
     $this->page->addVar('tags', $ListTag);
+
 
   }
  
@@ -160,7 +161,9 @@ class NewsController extends BackController
       $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
 
 
-      $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','show',[$request->getData('news')]));
+      $vars = array();
+      $vars['id']=$request->getData('news');
+      $this->app->httpResponse()->redirect($this->app->router()->getBuiltRoute('News','show',$vars));
       //$this->app->httpResponse()->redirect('news-'.$request->getData('news').'.html');
     }
  

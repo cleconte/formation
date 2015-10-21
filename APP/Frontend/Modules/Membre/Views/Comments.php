@@ -2,10 +2,13 @@
 <ul id="profilmenu">
 
 
-    <li> <?php echo '<a href='.$this->app->router()->BuildRoute('Membre','index',[$id ]).'>'?>Retour à son Profil</a></li>
+    <li> <?php
+        $vars= array();
+        $vars['id']=$id;
+        echo '<a href='.$Router->BuildRoute('Membre','index',$vars).'>'?>Retour à son Profil</a></li>
 
     <?php if($auteur!=false)
-    {?><li> <?php echo '<a href='.$this->app->router()->BuildRoute('Membre','News',[$id ]).'>'?>Ses News</a></li>
+    {?><li> <?php echo '<a href='.$Router->BuildRoute('Membre','News',$vars).'>'?>Ses News</a></li>
     <?php }?>
 </ul>
 
@@ -24,7 +27,10 @@ if($number>0) {
                     <a href="../admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
                 <?php } ?>
 
-                sur cette <?php echo '<a href='.$this->app->router()->BuildRoute('News','show',[$comment['news'] ]).'>'?>New</a>
+                sur cette <?php
+                            $vars= array();
+                            $vars['id']=$comment['news'];
+                            echo '<a href='.$Router->BuildRoute('News','show',$vars).'>'?>New</a>
             </legend>
             <p><?= nl2br(htmlspecialchars($comment['contenu'])) ?></p>
         </fieldset>
@@ -35,6 +41,6 @@ else
 {
 ?>
     <h2>Il n'a pas écris de commentaire</h2>
-    <p>Allez donc voir quelques news<?php echo '<a href='.$this->app->router()->BuildRoute('News','index',[]).'>'?><img src="/images/update.png" alt="Accueil" /></a></p>
+    <p>Allez donc voir quelques news<?php echo '<a href='.$Router->BuildRoute('News','index',[]).'>'?><img src="/images/update.png" alt="Accueil" /></a></p>
 <?php
 }?>

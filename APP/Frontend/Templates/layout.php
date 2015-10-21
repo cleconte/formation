@@ -17,13 +17,13 @@
   <body>
     <div id="wrap">
       <header>
-        <?php echo '<h1><a href='.$this->app->router()->BuildRoute('Profil','index',[]).'>Mon super site</a></h1>' ?>
+        <?php echo '<h1><a href='.$Router->getBuiltRoute('News','index',[]).'>Mon super site</a></h1>' ?>
         <p>Comment ça, il n'y a presque rien ?</p>
       </header>
 
       <nav>
         <ul>
-          <?php echo '<li><a href='.$this->app->router()->BuildRoute('News','index',[]).'>Accueil</a></li>' ?>
+          <?php echo '<li><a href='.$Router->BuildRoute('News','index',[]).'>Accueil</a></li>' ?>
 
           <?php
 

@@ -1,6 +1,6 @@
 <?php
 namespace OCFram;
- 
+
 class Router
 {
   /** @var Route[] $routes */
@@ -67,11 +67,28 @@ class Router
 
     if($route->hasVars()){
     //ajouter les variables
-      $routebuilt=$route->url();
-      foreach($vars as $var){//key de route
+      $routebuilt=$route->url(); //initialisation
+
+
+      $varsName = $route->varsNames();
+       // Pour chaque Nom d'attribut, on recherche par la clé associé la bonne variable.
+       foreach($varsName as $Name){
+         if(isset($vars[$Name])){
+           $routebuilt = preg_replace('/\(.*\)/', $vars[$Name], $routebuilt,1);
+         }
+         else{
+           throw new \RuntimeException('Il n\'y a pas de correspondance de clé');
+         }
+      }
+
+      /*
+       *foreach($vars as $var){//key de route
         $routebuilt = preg_replace('/\(.*\)/', $var, $routebuilt,1);
       }//pour chaque parenthèse, on insère la variable associé (l'ordre est donc important)
+      */
+
       return $routebuilt;
+
 
     }else{
       return $route->url();

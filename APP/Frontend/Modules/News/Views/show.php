@@ -1,4 +1,9 @@
-<p>Par <a href=<?php echo''.$this->app->router()->BuildRoute('Membre','index',array($id)).'' ;?>><em><?= $news['auteur'] ?></em></a>, le <?= $news['dateAjout']->format('d/m/Y à H\hi') ?></p>
+<p>Par <?php
+    $vars= array();
+    $vars['id']=$id;
+    echo '<a href='.$Router->BuildRoute('Membre','index',$vars) ;?>
+        '>
+        <em><?= $news['auteur'] ?></em></a>, le <?= $news['dateAjout']->format('d/m/Y à H\hi') ?></p>
 
 <h2><?= $news['titre'] ?></h2>
 
@@ -16,7 +21,11 @@
           {
               $i++;
               ?>
-              <?php echo '<a href='.$this->app->router()->BuildRoute('Tag','ShowTag',[$tag[2]]).'>'. $tag[0] .'</a>';?>
+              <?php
+
+                  $vars= array();
+                  $vars['id']=$tag[2];
+                    echo '<a href='.$Router->BuildRoute('Tag','ShowTag',$vars).'>'. $tag[0] .'</a>';?>
               <?php
           }
       }
@@ -28,7 +37,11 @@
 </fieldset>
 </br>
 
-<?php echo '<p><a href='.$this->app->router()->BuildRoute('News','insertComment',[$news['id']]).'>Ajouter un commentaire</a></p>';?>
+<?php
+
+$vars= array();
+$vars['news']=$news['id'];
+echo '<p><a href='.$Router->BuildRoute('News','insertComment',$vars).'>Ajouter un commentaire</a></p>';?>
 
 
 
@@ -56,12 +69,17 @@ if (empty($comments))
 
                     Posté par
                     <strong>
-                            <?php echo '<a href='.$this->app->router()->BuildRoute('Membre','index',[$comment['auteur']]) ?>
+                            <?php
+
+                            $vars= array();
+                            $vars['id']=$comment['auteur'];
+                            echo '<a href='.$Router->BuildRoute('Membre','index',$vars) ?>
                             <a href="Membre-<?= $comment['auteur'] ?>"><?= htmlspecialchars($comment['auteur']) ?></a>
                     </strong>
                     le <?= $comment['date']->format('d/m/Y à H\hi') ?>
 
                     <?php if ($user->isAuthenticated()) { ?>
+
                         <a href="../admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a>
                         <a href="../admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
 

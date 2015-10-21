@@ -1,7 +1,11 @@
 <ul id="profilmenu">
+    <?php
 
-    <li><?php echo '<a href='.$this->app->router()->BuildRoute('Membre','index',[$id ]).'>'?>Retour à son Profils</a></li>
-    <li><?php echo '<a href='.$this->app->router()->BuildRoute('Membre','Comments',[$id ]).'>'?>Ses Commentaires</a></li>
+    $vars= array();
+    $vars['id']=$id;
+    ?>
+    <li><?php echo '<a href='.$Router->BuildRoute('Membre','index',$vars).'>'?>Retour à son Profils</a></li>
+    <li><?php echo '<a href='.$Router->BuildRoute('Membre','Comments',$vars).'>'?>Ses Commentaires</a></li>
 </ul>
 
 <?php
