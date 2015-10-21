@@ -8,6 +8,7 @@ use \App\Frontend\AppController;
 use \OCFram\BackController;
 use \OCFram\HTTPRequest;
 use \OCFram\FormHandler;
+use \OCFram\Page;
 
 use \Entity\News;
 use \Entity\Comment;
@@ -316,9 +317,8 @@ class NewsController extends BackController
   public function getjsonComment($ListComm){
 
     $ListComm = json_encode($ListComm);
-    echo $ListComm;
-
-    exit();
+    $this->page->setTypeLayout(Page::TYPE_JSON);
+    $this->page->addVar('contentjson', $ListComm);
   }
 
   public function executegetNewComments(HTTPRequest $request)
@@ -337,7 +337,9 @@ class NewsController extends BackController
 
     $ListComm = $managernews->getListOldComments($news_id,$comment_id) ;
 
-    self::getjsonComment($ListComm);
+    $ListComm = json_encode($ListComm);
+    $this->page->setTypeLayout(Page::TYPE_JSON);
+    $this->page->addVar('contentjson', $ListComm);
   }
 
   public function executeTest(HTTPRequest $request){
@@ -382,14 +384,3 @@ class NewsController extends BackController
   }
 
 }
-
-/*
-Tu dois générere cette immondice :
-
-
-INSERT INTO T_NEW_tagc (NTC_name)
-SELECT name
-FROM (SELECT 'php' as name UNION SELECT 'sql' as name) AS A
-LEFT OUTER JOIN T_NEW_tagc AS B ON A.name = B.NTC_name
-WHERE B.NTC_id IS NULL
-*/

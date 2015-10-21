@@ -6,6 +6,11 @@ class Page extends ApplicationComponent
 {
   protected $contentFile;
   protected $vars = [];
+  protected $typelayout = "";
+
+
+  const TYPE_HTML = "";
+  const TYPE_JSON = "JSON";
 
   public function addVar($var, $value)
   {
@@ -25,7 +30,7 @@ class Page extends ApplicationComponent
     {
       throw new \RuntimeException('La vue spécifiée n\'existe pas');
     }
- 
+
     $user = $this->app->user();
 
 
@@ -39,10 +44,14 @@ class Page extends ApplicationComponent
 
     ob_start();
 
-    require __DIR__.'/../../App/'.$this->app->name().'/Templates/layout.php';
+    require __DIR__.'/../../App/'.$this->app->name().'/Templates/'.$this->typelayout.'layout.php';
     return ob_get_clean();
   }
- 
+
+  public function setTypeLayout($constanttype){
+    $this->typelayout = $constanttype;
+  }
+
   public function setContentFile($contentFile)
   {
     if (!is_string($contentFile) || empty($contentFile))

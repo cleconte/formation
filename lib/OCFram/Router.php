@@ -63,7 +63,6 @@ class Router
    */
   public function getBuiltRoute($module, $action, array $vars){
 
-
     $route = $this->routes[$module.','.$action];
 
     if($route->hasVars()){
